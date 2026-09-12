@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>História de Aracaju — Origem e Transferência da Capital</title>
+<style>
+:root{
+  --bg:#07111f;--card:#0d1b2d;--text:#f5f7fb;--muted:#a9b7c9;
+  --line:#203752;--accent:#5bbcff;--ok:#2ed573;--bad:#ff5a68;
+  --warn:#ffd166;--purple:#b49cff
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#06101d,#09182a 45%,#07111f);
+  color:var(--text);min-height:100vh
+}
+.app{max-width:920px;margin:0 auto;padding:14px 14px 48px}
+.topbar{
+  position:sticky;top:0;z-index:20;background:rgba(7,17,31,.95);
+  backdrop-filter:blur(12px);padding:10px 0 12px;border-bottom:1px solid var(--line)
+}
+.brand h1{font-size:1.18rem;margin:0 0 4px}
+.brand .sub{color:var(--muted);font-size:.82rem}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.tabbtn{
+  border:1px solid var(--line);background:var(--card);color:var(--muted);
+  padding:11px;border-radius:12px;font-weight:800;cursor:pointer
+}
+.tabbtn.active{
+  background:linear-gradient(180deg,#123455,#0e2a47);
+  color:white;border-color:#315a80
+}
+.page{display:none}.page.active{display:block}
+.hero{
+  background:linear-gradient(135deg,#0f2945,#101d31);border:1px solid #254663;
+  border-radius:18px;padding:18px;margin-top:16px
+}
+.hero h2{margin:0 0 7px;font-size:1.15rem}
+.hero p{margin:0;color:#d7e3ef;line-height:1.5}
+.quickgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}
+.quick{background:#0b1727;border:1px solid var(--line);border-radius:12px;padding:11px}
+.quick b{display:block;color:#8fd0ff;margin-bottom:3px}
+.section{
+  margin-top:16px;background:var(--card);border:1px solid var(--line);
+  border-radius:17px;padding:17px;box-shadow:0 14px 40px rgba(0,0,0,.16)
+}
+.section h2{font-size:1rem;margin:0 0 11px;color:#91d1ff}
+.section h3{font-size:.91rem;margin:14px 0 7px;color:#dbe9f6}
+.section p,.section li{line-height:1.52;color:#e7edf5}
+.section ul{padding-left:19px;margin:8px 0}
+.badge{
+  display:inline-block;padding:5px 9px;border-radius:999px;background:#132c46;
+  color:#8fd0ff;font-weight:800;font-size:.7rem;letter-spacing:.04em;margin-bottom:8px
+}
+.schema{
+  margin:10px 0;padding:12px;border-radius:12px;background:#0f2237;
+  border-left:4px solid var(--warn);font-weight:800;line-height:1.72
+}
+.trap{
+  margin-top:10px;padding:10px 12px;border-radius:11px;
+  background:rgba(180,156,255,.08);border:1px solid rgba(180,156,255,.25)
+}
+.trap b{color:var(--purple)}
+.key{
+  padding:10px 12px;border-radius:12px;background:rgba(91,188,255,.08);
+  border:1px solid rgba(91,188,255,.24);margin:9px 0
+}
+.timeline{color:#ffd98a;font-weight:900;font-size:.78rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center}
+.stat b{display:block;font-size:1.02rem}.stat span{font-size:.68rem;color:var(--muted)}
+.progress{height:7px;background:#17283c;border-radius:99px;overflow:hidden;margin-top:10px}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--purple));transition:.25s}
+.qcard{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.qnum{color:var(--muted);font-size:.82rem;margin:9px 0 7px}
+.question{font-size:1.07rem;line-height:1.55;font-weight:800;margin:0 0 16px}
+.options{display:grid;gap:10px}
+.option{
+  width:100%;text-align:left;border:1px solid #2b405a;background:#0a1728;color:var(--text);
+  padding:13px 14px;border-radius:13px;cursor:pointer;font-size:.94rem;line-height:1.42;transition:.15s
+}
+.option:hover{border-color:#4f7399;transform:translateY(-1px)}
+.option:disabled{cursor:default}
+.option.correct{background:rgba(46,213,115,.12);border-color:var(--ok)}
+.option.wrong{background:rgba(255,90,104,.12);border-color:var(--bad)}
+.letter{
+  display:inline-flex;width:25px;height:25px;align-items:center;justify-content:center;
+  border-radius:7px;background:#162b43;margin-right:8px;font-weight:800
+}
+.feedback{display:none;margin-top:17px;border-top:1px solid var(--line);padding-top:16px}
+.feedback.show{display:block}
+.result{font-weight:900;font-size:1.05rem;margin-bottom:11px}
+.result.ok{color:var(--ok)}.result.bad{color:var(--bad)}
+.comment{
+  background:#091625;border:1px solid #1d3855;border-radius:14px;
+  padding:14px;line-height:1.52
+}
+.comment h3{font-size:.88rem;margin:0 0 8px;color:#8fd0ff;text-transform:uppercase}
+.comment p{margin:7px 0;color:#e7edf5}
+.actions{display:flex;gap:9px;margin-top:16px}
+button.ctrl{border:0;border-radius:11px;padding:11px 15px;font-weight:800;cursor:pointer}
+.next{background:var(--accent);color:#031321;flex:1}
+.reset{background:#1b2e44;color:#d9e4ef}
+.final{display:none;text-align:center}.final.show{display:block}
+.final .big{font-size:2.1rem;font-weight:900;color:var(--accent)}
+.review{margin-top:15px;text-align:left}.small{font-size:.8rem;color:var(--muted)}
+@media(max-width:620px){
+ .app{padding:8px 10px 34px}.section,.qcard{padding:14px}
+ .brand h1{font-size:1.02rem}.quickgrid{grid-template-columns:1fr}
+ .option{font-size:.9rem;padding:12px}.question{font-size:1rem}
+ .stats{gap:5px}.stat{padding:7px 4px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="topbar">
+  <div class="brand">
+    <h1>História de Aracaju — Origem e Transferência da Capital</h1>
+    <div class="sub">Aula esquematizada + simulado IDECAN</div>
+  </div>
+  <div class="tabs">
+    <button id="tabLesson" class="tabbtn active" onclick="showPage('lesson')">📘 Aula Esquematizada</button>
+    <button id="tabQuiz" class="tabbtn" onclick="showPage('quiz')">📝 Simulado IDECAN</button>
+  </div>
+</div>
+
+<main id="lessonPage" class="page active">
+  <div class="hero">
+    <span class="badge">ROTEIRO DA AULA</span>
+    <h2>Da origem de Aracaju à transferência da capital</h2>
+    <p>Conteúdo organizado para acompanhar a videoaula: origem indígena, povoado de Santo Antônio, distrito, mudança da capital, porto, açúcar, fiscalização e planejamento urbano.</p>
+    <div class="quickgrid">
+      <div class="quick"><b>Data central</b>17 de março de 1855</div>
+      <div class="quick"><b>Liderança</b>Inácio Joaquim Barbosa</div>
+      <div class="quick"><b>Motivação principal</b>Economia + logística portuária</div>
+      <div class="quick"><b>Projeto urbano</b>Sebastião Basílio Pirro</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 00:06–05:40</div>
+    <h2>1. História de Aracaju dentro da História do Brasil</h2>
+    <p>O professor começa situando Aracaju dentro dos grandes períodos da História do Brasil.</p>
+    <div class="schema">
+      IMPÉRIO → TRANSFERÊNCIA DA CAPITAL<br>
+      REPÚBLICA VELHA → REVOLTAS / CRISES / TENENTISMO<br>
+      ERA VARGAS → SEGUNDA GUERRA MUNDIAL
+    </div>
+    <div class="trap"><b>Ponto-chave:</b> a história de Aracaju não deve ser estudada de forma isolada da história brasileira.</div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 05:43–08:10</div>
+    <h2>2. Origem indígena e nome Aracaju</h2>
+    <p>A região é apresentada como área ligada ao cacique <b>Serigy</b>, entre os rios Sergipe e Vaza-Barris.</p>
+    <p>O professor cita dois grandes grupos indígenas:</p>
+    <ul>
+      <li><b>Tupis</b> — falavam línguas do tronco tupi;</li>
+      <li><b>Tapuias</b> — não falavam tupi.</li>
+    </ul>
+    <div class="key"><b>Etimologia apresentada:</b> Aracaju = “cajueiro dos papagaios”.</div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 08:10–13:50</div>
+    <h2>3. Sesmaria, povoado e Santo Antônio</h2>
+    <p>Após a conquista, a região é associada à concessão de sesmaria.</p>
+    <p>O povoado de Santo Antônio se desenvolve na:</p>
+    <div class="schema">COLINA DE SANTO ANTÔNIO</div>
+    <p>A aula destaca a diferença entre:</p>
+    <div class="schema">
+      POVOADO / VILA → COLINA DE SANTO ANTÔNIO<br><br>
+      CAPITAL PLANEJADA → PRAÇA DO PALÁCIO / PRAÇA FAUSTO CARDOSO
+    </div>
+    <div class="trap"><b>Pegadinha forte:</b> não confundir o local inicial do povoado com o ponto inicial do projeto da nova capital.</div>
+    <p>O professor cita a criação do povoado em <b>1602</b> e sua elevação a distrito em <b>1837</b>.</p>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 14:00–16:45</div>
+    <h2>4. Transferência da capital — 1855</h2>
+    <div class="schema">17 DE MARÇO DE 1855 → SÃO CRISTÓVÃO → ARACAJU</div>
+    <p>Personagens centrais trabalhados:</p>
+    <ul>
+      <li><b>Inácio Joaquim Barbosa</b> — presidente da província;</li>
+      <li><b>Barão de Maruim</b> — apoiador político e grande proprietário.</li>
+    </ul>
+    <div class="trap"><b>Não memorize como fato:</b> o professor menciona rumores sobre valorização de terrenos, mas avisa que isso não é confirmação histórica e separa isso dos “motivos reais”.</div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 16:48–22:40</div>
+    <h2>5. Motivos econômicos e logísticos</h2>
+    <p>O núcleo da transferência, segundo a aula, é econômico e logístico.</p>
+    <div class="schema">
+      VALE DO COTINGUIBA → MUITO AÇÚCAR<br>
+      ↓<br>
+      PRECISAVA ESCOAR A PRODUÇÃO<br>
+      ↓<br>
+      PORTO MAIS EFICIENTE EM ARACAJU
+    </div>
+    <p>O professor destaca:</p>
+    <ul>
+      <li>produção açucareira do Vale do Cotinguiba;</li>
+      <li>alto custo para escoar por São Cristóvão;</li>
+      <li>assoreamento e limitações do porto antigo;</li>
+      <li>melhores condições na foz do Rio Sergipe;</li>
+      <li>necessidade de receber embarcações maiores.</li>
+    </ul>
+    <div class="key"><b>Dado da aula:</b> aproximadamente 75% da produção provincial vinha do Vale do Cotinguiba.</div>
+  </div>
+
+  <div class="section">
+    <h2>6. Combate ao contrabando e fiscalização</h2>
+    <p>A mudança também aproximava a administração do local de exportação.</p>
+    <div class="schema">
+      CAPITAL + PORTO MAIS PRÓXIMOS<br>
+      ↓<br>
+      MAIS CONTROLE FISCAL<br>
+      ↓<br>
+      COMBATE AO CONTRABANDO + COBRANÇA DE IMPOSTOS
+    </div>
+    <div class="trap"><b>IDECAN:</b> a banca pode apresentar apenas o porto como razão. A aula trabalha também a fiscalização e o controle fiscal.</div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 22:41–29:15</div>
+    <h2>7. Planejamento urbano — tabuleiro de xadrez</h2>
+    <p>A cidade planejada é associada ao engenheiro:</p>
+    <div class="schema">SEBASTIÃO BASÍLIO PIRRO</div>
+    <p>O traçado é descrito como:</p>
+    <div class="schema">MALHA ORTOGONAL → TABULEIRO DE XADREZ</div>
+    <p>Aracaju é apresentada como uma das primeiras cidades planejadas do Brasil.</p>
+    <p>Mas o terreno apresentava dificuldades:</p>
+    <ul>
+      <li>manguezais;</li>
+      <li>dunas;</li>
+      <li>áreas pantanosas/lodosas;</li>
+      <li>solo pouco firme.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>8. A mudança foi rápida, não lenta</h2>
+    <p>O professor enfatiza que a transferência não ocorreu de forma calma, lenta e perfeitamente planejada.</p>
+    <div class="schema">TRANSFERÊNCIA → RÁPIDA / URGENTE</div>
+    <p>A pressa é relacionada à necessidade de consolidar a nova capital e reduzir a resistência de setores ligados a São Cristóvão.</p>
+    <div class="trap"><b>Pegadinha:</b> “a transição ocorreu pacificamente ao longo de uma década” = ERRADO na lógica da aula.</div>
+  </div>
+
+  <div class="section">
+    <h2>9. Praça Fausto Cardoso x Colina de Santo Antônio</h2>
+    <p>Esta é uma das pegadinhas mais repetidas na aula.</p>
+    <div class="schema">
+      POVOADO ANTIGO → COLINA DE SANTO ANTÔNIO<br><br>
+      PROJETO DA NOVA CAPITAL → PRAÇA DO PALÁCIO / FAUSTO CARDOSO
+    </div>
+    <p>A Praça Fausto Cardoso é apresentada como o ponto de partida do traçado urbano planejado.</p>
+  </div>
+
+  <div class="section">
+    <h2>10. Questões comentadas no fim da aula</h2>
+    <p>O professor elimina como erradas as afirmações de que:</p>
+    <ul>
+      <li>a mudança ocorreu por surto de varíola em São Cristóvão;</li>
+      <li>o ponto inicial do projeto foi a Colina de Santo Antônio;</li>
+      <li>a transição foi lenta e pacífica;</li>
+      <li>o Barão de Maruim era contrário à transferência;</li>
+      <li>a intenção era afastar a administração do Oceano Atlântico;</li>
+      <li>o Vale do Cotinguiba estava completamente esgotado;</li>
+      <li>houve descoberta de carvão mineral como razão principal;</li>
+      <li>Aracaju foi escolhida para centralizar todo o algodão do Nordeste.</li>
+    </ul>
+    <div class="key"><b>Resposta destacada:</b> o principal motor foi econômico, com aproximação do aparato fiscal e portuário da foz do Rio Sergipe.</div>
+  </div>
+
+  <div class="section">
+    <span class="badge">NATA PARA A PROVA</span>
+    <h2>Resumo final</h2>
+    <div class="schema">
+      POVOADO → COLINA DE SANTO ANTÔNIO<br>
+      DISTRITO → 1837<br>
+      CAPITAL → 17/03/1855<br><br>
+      INÁCIO BARBOSA + BARÃO DE MARUIM<br><br>
+      MOTIVO CENTRAL → AÇÚCAR + PORTO + LOGÍSTICA<br>
+      + FISCALIZAÇÃO + COMBATE AO CONTRABANDO<br><br>
+      VALE DO COTINGUIBA → GRANDE PRODUÇÃO AÇUCAREIRA<br><br>
+      PROJETO → SEBASTIÃO BASÍLIO PIRRO<br>
+      MALHA → TABULEIRO DE XADREZ<br>
+      MARCO DO PROJETO → PRAÇA FAUSTO CARDOSO
+    </div>
+  </div>
+</main>
+
+<main id="quizPage" class="page">
+  <div class="hero">
+    <span class="badge">SIMULADO IDECAN</span>
+    <h2>Questões da aula</h2>
+    <p>25 questões A–E, alternativas embaralhadas, correção imediata e comentário esquematizado.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="current">1/25</b><span>QUESTÃO</span></div>
+    <div class="stat"><b id="hits">0</b><span>ACERTOS</span></div>
+    <div class="stat"><b id="misses">0</b><span>ERROS</span></div>
+    <div class="stat"><b id="rate">0%</b><span>APROVEIT.</span></div>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+
+  <div id="quizCard" class="qcard">
+    <span class="badge">A–E • ESTILO IDECAN</span>
+    <div id="qnum" class="qnum"></div>
+    <div id="question" class="question"></div>
+    <div id="options" class="options"></div>
+    <div id="feedback" class="feedback">
+      <div id="result" class="result"></div>
+      <div id="comment" class="comment"></div>
+      <div class="actions"><button class="ctrl next" id="nextBtn">Próxima questão →</button></div>
+    </div>
+  </div>
+
+  <div id="final" class="qcard final">
+    <span class="badge">RESULTADO FINAL</span>
+    <div style="margin-top:14px" class="big" id="finalScore"></div>
+    <p id="finalText"></p>
+    <div class="review" id="review"></div>
+    <button class="ctrl reset" onclick="restart()">Refazer simulado</button>
+  </div>
+</main>
+</div>
+
+<script>
+function showPage(page){
+  const lesson=page==='lesson';
+  document.getElementById('lessonPage').classList.toggle('active',lesson);
+  document.getElementById('quizPage').classList.toggle('active',!lesson);
+  document.getElementById('tabLesson').classList.toggle('active',lesson);
+  document.getElementById('tabQuiz').classList.toggle('active',!lesson);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function shuffledQuestion(q){
+  const opts=q.a.map((text,i)=>({text,correct:i===q.c}));
+  for(let i=opts.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [opts[i],opts[j]]=[opts[j],opts[i]];
+  }
+  return {...q,a:opts.map(x=>x.text),c:opts.findIndex(x=>x.correct)};
+}
+const questionBank=[
+{q:"A transferência da capital de Sergipe para Aracaju ocorreu em:",a:["17 de março de 1837.","17 de março de 1855.","15 de novembro de 1889.","24 de outubro de 1855.","8 de julho de 1860."],c:1,com:`<h3>Comentário</h3><div class="schema">17/03/1855 → TRANSFERÊNCIA DA CAPITAL</div>`},
+{q:"Antes de Aracaju, a capital da província era:",a:["Laranjeiras.","Itabaiana.","São Cristóvão.","Estância.","Nossa Senhora do Socorro."],c:2,com:`<h3>Comentário</h3><p>A mudança ocorre de <b>São Cristóvão para Aracaju</b>.</p>`},
+{q:"O principal personagem político associado à transferência é:",a:["Fausto Cardoso.","Pereira Lobo.","Inácio Joaquim Barbosa.","Sebastião Pirro.","Cristóvão de Barros."],c:2,com:`<h3>Comentário</h3><p>Inácio Joaquim Barbosa era o presidente da província.</p>`},
+{q:"O Barão de Maruim, segundo a aula, foi:",a:["O principal opositor da transferência.","Um apoiador influente do processo.","O engenheiro responsável pelo traçado urbano.","O cacique que ocupava a região.","O governador republicano da cidade."],c:1,com:`<h3>Comentário</h3><p>O professor enfatiza que ele era <b>a favor</b> da transferência.</p>`},
+{q:"O principal motor econômico da transferência da capital foi:",a:["A mineração de carvão.","A produção algodoeira do sertão.","A necessidade de escoar com maior eficiência a produção açucareira.","A expansão da pecuária.","O turismo litorâneo."],c:2,com:`<h3>Comentário</h3><div class="schema">AÇÚCAR → PORTO → LOGÍSTICA → ARACAJU</div>`},
+{q:"A região produtora de açúcar destacada na aula foi:",a:["Vale do Cotinguiba.","Vale do São Francisco.","Agreste de Itabaiana.","Sul sergipano.","Baixo Vaza-Barris."],c:0,com:`<h3>Comentário</h3><p>O Vale do Cotinguiba aparece como o grande núcleo açucareiro.</p>`},
+{q:"Segundo a aula, aproximadamente quanto da produção provincial vinha do Vale do Cotinguiba?",a:["25%.","40%.","50%.","75%.","90%."],c:3,com:`<h3>Comentário</h3><p>O professor menciona cerca de <b>75%</b>.</p>`},
+{q:"Um problema do porto ligado a São Cristóvão era:",a:["Excesso de profundidade.","Assoreamento e limitação para embarcações maiores.","Distância muito curta do oceano.","Ausência completa de rios.","Excesso de salinidade."],c:1,com:`<h3>Comentário</h3><div class="schema">ASSOREAMENTO → ÁGUA MAIS RASA → DIFICULDADE PARA NAVIOS MAIORES</div>`},
+{q:"A foz escolhida para o novo porto estava ligada ao:",a:["Rio Vaza-Barris.","Rio Poxim.","Rio Sergipe.","Rio São Francisco.","Rio Real."],c:2,com:`<h3>Comentário</h3><p>A aula destaca a <b>foz do Rio Sergipe</b>.</p>`},
+{q:"Além do escoamento da produção, a mudança também buscava:",a:["Eliminar totalmente os impostos.","Combater contrabando e melhorar a fiscalização fiscal.","Afastar o governo do porto.","Reduzir a presença estatal.","Acabar com o comércio marítimo."],c:1,com:`<h3>Comentário</h3><div class="schema">CAPITAL PERTO DO PORTO → MAIS FISCALIZAÇÃO → MENOS CONTRABANDO</div>`},
+{q:"O engenheiro associado ao traçado urbano planejado de Aracaju foi:",a:["Inácio Barbosa.","Barão de Maruim.","Sebastião Basílio Pirro.","Fausto Cardoso.","Pedro Gonçalves."],c:2,com:`<h3>Comentário</h3><div class="schema">SEBASTIÃO BASÍLIO PIRRO → PROJETO URBANO</div>`},
+{q:"O traçado urbano original da nova capital é comparado a:",a:["Uma espiral.","Um círculo concêntrico.","Um tabuleiro de xadrez.","Uma estrela.","Um eixo radial."],c:2,com:`<h3>Comentário</h3><p>Malha ortogonal, quarteirões regulares, “tabuleiro de xadrez”.</p>`},
+{q:"Qual local é indicado como ponto inicial do projeto urbano da nova capital?",a:["Colina de Santo Antônio.","Praça Fausto Cardoso / antiga Praça do Palácio.","Atalaia.","Morro do Urubu.","Praça da Bandeira."],c:1,com:`<h3>Comentário</h3><div class="schema">PROJETO DA CAPITAL → PRAÇA FAUSTO CARDOSO</div>`},
+{q:"A Colina de Santo Antônio está associada principalmente:",a:["Ao ponto inicial do projeto da capital de 1855.","Ao antigo povoado/vila anterior à capital planejada.","Ao porto açucareiro moderno.","À Praça do Palácio.","À sede da Câmara Municipal."],c:1,com:`<h3>Comentário</h3><div class="schema">POVOADO → COLINA DE SANTO ANTÔNIO</div>`},
+{q:"A diferença correta entre povoado e capital planejada é:",a:["Ambos tiveram como marco inicial a Praça Fausto Cardoso.","Povoado: Colina de Santo Antônio; capital planejada: Praça Fausto Cardoso.","Povoado: Atalaia; capital: Colina de Santo Antônio.","Povoado: São Cristóvão; capital: Laranjeiras.","Não há diferença."],c:1,com:`<h3>Comentário</h3><p>Essa é uma das maiores pegadinhas da aula.</p>`},
+{q:"Segundo a aula, Aracaju foi elevada à condição de distrito em:",a:["1590.","1602.","1837.","1855.","1889."],c:2,com:`<h3>Comentário</h3><p>Distrito em <b>1837</b>; capital em <b>1855</b>.</p>`},
+{q:"O povoado citado na aula teria sido criado em:",a:["1590.","1602.","1700.","1837.","1855."],c:1,com:`<h3>Comentário</h3><p>A aula trabalha <b>1602</b> como data de criação do povoado.</p>`},
+{q:"A mudança da capital ocorreu, segundo a lógica da aula:",a:["De forma lenta ao longo de uma década.","Rapidamente, para consolidar a mudança.","Sem qualquer resistência.","Somente após completa urbanização.","Apenas no século XX."],c:1,com:`<h3>Comentário</h3><p>O professor rejeita a ideia de transição lenta e tranquila.</p>`},
+{q:"A topografia do sítio de Aracaju era apresentada como:",a:["Perfeitamente firme e seca.","Marcada por manguezais, dunas e áreas pantanosas.","Montanhosa e rochosa.","Desértica.","Sem qualquer obstáculo natural."],c:1,com:`<h3>Comentário</h3><p>O terreno era difícil, com áreas úmidas e pouco firmes.</p>`},
+{q:"A afirmativa de que a mudança ocorreu por um grande surto de varíola em São Cristóvão é:",a:["Correta.","Parcialmente correta.","Errada segundo a aula.","O principal motivo econômico.","O motivo geográfico principal."],c:2,com:`<h3>Comentário</h3><p>O professor elimina essa alternativa de imediato.</p>`},
+{q:"A ideia de que o Vale do Cotinguiba estava completamente esgotado é:",a:["Correta.","Errada.","Correta apenas para o açúcar.","O motivo central da mudança.","Confirmada como principal razão."],c:1,com:`<h3>Comentário</h3><p>O professor destaca que o Vale continuava produzindo muito.</p>`},
+{q:"Sobre o Barão de Maruim, é correto afirmar:",a:["Era contrário à transferência.","Apoiava o processo de mudança.","Foi o autor do projeto urbanístico.","Foi o presidente da província.","Foi o líder indígena local."],c:1,com:`<h3>Comentário</h3><p>Ele é apresentado como aliado da transferência.</p>`},
+{q:"Do ponto de vista estritamente econômico e logístico, a escolha de Aracaju se explica sobretudo por:",a:["Proximidade de minas de carvão.","Melhores condições portuárias e escoamento do açúcar.","Clima mais frio.","Maior distância do litoral.","Presença de ferrovias já construídas."],c:1,com:`<h3>Comentário</h3><div class="schema">PORTO + AÇÚCAR + LOGÍSTICA</div>`},
+{q:"Qual alternativa sintetiza melhor as motivações trabalhadas na aula?",a:["Saúde pública e mineração.","Economia açucareira, porto, logística e fiscalização.","Turismo e pecuária.","Clima e religião.","Algodão e indústria pesada."],c:1,com:`<h3>Comentário</h3><div class="schema">AÇÚCAR + PORTO + CONTROLE FISCAL</div>`},
+{q:"A síntese correta sobre a fundação da nova capital é:",a:["Povoado na Praça Fausto Cardoso e capital na Colina de Santo Antônio.","Povoado na Colina de Santo Antônio e nova capital planejada a partir da Praça Fausto Cardoso.","A capital foi planejada sem engenheiro responsável.","A mudança ocorreu por causa de varíola.","O Barão de Maruim foi seu principal opositor."],c:1,com:`<h3>Comentário</h3><p>Essa questão reúne as duas pegadinhas mais importantes do bloco.</p>`}
+];
+
+let questions=questionBank.map(shuffledQuestion),idx=0,hits=0,misses=0,answered=false;
+const wrongList=[];
+function render(){
+ const q=questions[idx];answered=false;
+ document.getElementById("current").textContent=`${idx+1}/${questions.length}`;
+ document.getElementById("qnum").textContent=`QUESTÃO ${String(idx+1).padStart(2,"0")} DE ${questions.length}`;
+ document.getElementById("question").textContent=q.q;
+ document.getElementById("feedback").classList.remove("show");
+ const box=document.getElementById("options");box.innerHTML="";
+ q.a.forEach((t,i)=>{
+   const b=document.createElement("button");
+   b.className="option";
+   b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span>${t}`;
+   b.onclick=()=>answer(i,b);
+   box.appendChild(b)
+ });
+ updateStats();
+}
+function answer(i,btn){
+ if(answered)return;answered=true;
+ const q=questions[idx],buttons=[...document.querySelectorAll(".option")];
+ buttons.forEach(x=>x.disabled=true);
+ buttons[q.c].classList.add("correct");
+ const res=document.getElementById("result");
+ if(i===q.c){
+   hits++;res.textContent="✓ ACERTOU!";res.className="result ok"
+ }else{
+   misses++;wrongList.push(idx);btn.classList.add("wrong");
+   res.textContent=`✕ ERROU. Gabarito: ${String.fromCharCode(65+q.c)}`;
+   res.className="result bad"
+ }
+ document.getElementById("comment").innerHTML=q.com;
+ document.getElementById("feedback").classList.add("show");
+ document.getElementById("nextBtn").textContent=idx===questions.length-1?"Ver resultado →":"Próxima questão →";
+ updateStats();
+ setTimeout(()=>document.getElementById("feedback").scrollIntoView({behavior:"smooth",block:"nearest"}),100);
+}
+function updateStats(){
+ document.getElementById("hits").textContent=hits;
+ document.getElementById("misses").textContent=misses;
+ const total=hits+misses;
+ document.getElementById("rate").textContent=total?Math.round(hits/total*100)+"%":"0%";
+ document.getElementById("bar").style.width=((total/questions.length)*100)+"%";
+}
+document.getElementById("nextBtn").onclick=()=>{
+ if(idx<questions.length-1){idx++;render();window.scrollTo({top:0,behavior:"smooth"})}
+ else finish()
+};
+function finish(){
+ document.getElementById("quizCard").style.display="none";
+ const f=document.getElementById("final");f.classList.add("show");
+ const pct=Math.round(hits/questions.length*100);
+ document.getElementById("finalScore").textContent=`${hits}/${questions.length} • ${pct}%`;
+ document.getElementById("finalText").textContent=
+ pct>=90?"Excelente. História de Aracaju muito bem dominada.":
+ pct>=75?"Bom desempenho. Revise principalmente as pegadinhas que errou.":
+ pct>=60?"Base razoável. Volte aos blocos errados antes de refazer.":
+ "Revise a aula esquematizada e tente novamente.";
+ const rv=document.getElementById("review");
+ rv.innerHTML=wrongList.length
+ ?"<h3 style='color:#ffbdc3'>Pontos para revisar</h3>"+wrongList.map(n=>`<div class="small" style="margin:7px 0">• Questão ${n+1}: ${questions[n].q}</div>`).join("")
+ :"<p style='color:#2ed573;font-weight:800'>Você não errou nenhuma questão.</p>";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function restart(){
+ questions=questionBank.map(shuffledQuestion);
+ idx=0;hits=0;misses=0;wrongList.length=0;
+ document.getElementById("final").classList.remove("show");
+ document.getElementById("quizCard").style.display="block";
+ render();window.scrollTo({top:0,behavior:"smooth"});
+}
+render();
+</script>
+</body>
+</html>

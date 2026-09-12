@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aracaju — Aspectos Políticos, Administrativos, Sociais, Econômicos e Culturais</title>
+<style>
+:root{--bg:#07111f;--card:#0d1b2d;--text:#f5f7fb;--muted:#a9b7c9;--line:#203752;--accent:#5bbcff;--ok:#2ed573;--bad:#ff5a68;--warn:#ffd166;--purple:#b49cff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#06101d,#09182a 45%,#07111f);color:var(--text);min-height:100vh}
+.app{max-width:920px;margin:0 auto;padding:14px 14px 48px}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(7,17,31,.95);backdrop-filter:blur(12px);padding:10px 0 12px;border-bottom:1px solid var(--line)}
+.brand h1{font-size:1.18rem;margin:0 0 4px}.brand .sub{color:var(--muted);font-size:.82rem}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.tabbtn{border:1px solid var(--line);background:var(--card);color:var(--muted);padding:11px;border-radius:12px;font-weight:800;cursor:pointer}
+.tabbtn.active{background:linear-gradient(180deg,#123455,#0e2a47);color:white;border-color:#315a80}
+.page{display:none}.page.active{display:block}
+.hero{background:linear-gradient(135deg,#0f2945,#101d31);border:1px solid #254663;border-radius:18px;padding:18px;margin-top:16px}
+.hero h2{margin:0 0 7px;font-size:1.15rem}.hero p{margin:0;color:#d7e3ef;line-height:1.5}
+.quickgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}
+.quick{background:#0b1727;border:1px solid var(--line);border-radius:12px;padding:11px}.quick b{display:block;color:#8fd0ff;margin-bottom:3px}
+.section{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:17px;padding:17px;box-shadow:0 14px 40px rgba(0,0,0,.16)}
+.section h2{font-size:1rem;margin:0 0 11px;color:#91d1ff}.section h3{font-size:.91rem;margin:14px 0 7px;color:#dbe9f6}
+.section p,.section li{line-height:1.52;color:#e7edf5}.section ul{padding-left:19px;margin:8px 0}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#132c46;color:#8fd0ff;font-weight:800;font-size:.7rem;letter-spacing:.04em;margin-bottom:8px}
+.schema{margin:10px 0;padding:12px;border-radius:12px;background:#0f2237;border-left:4px solid var(--warn);font-weight:800;line-height:1.72}
+.trap{margin-top:10px;padding:10px 12px;border-radius:11px;background:rgba(180,156,255,.08);border:1px solid rgba(180,156,255,.25)}
+.trap b{color:var(--purple)}.key{padding:10px 12px;border-radius:12px;background:rgba(91,188,255,.08);border:1px solid rgba(91,188,255,.24);margin:9px 0}
+.timeline{color:#ffd98a;font-weight:900;font-size:.78rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center}.stat b{display:block;font-size:1.02rem}.stat span{font-size:.68rem;color:var(--muted)}
+.progress{height:7px;background:#17283c;border-radius:99px;overflow:hidden;margin-top:10px}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--purple));transition:.25s}
+.qcard{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.qnum{color:var(--muted);font-size:.82rem;margin:9px 0 7px}.question{font-size:1.07rem;line-height:1.55;font-weight:800;margin:0 0 16px}
+.options{display:grid;gap:10px}
+.option{width:100%;text-align:left;border:1px solid #2b405a;background:#0a1728;color:var(--text);padding:13px 14px;border-radius:13px;cursor:pointer;font-size:.94rem;line-height:1.42;transition:.15s}
+.option:hover{border-color:#4f7399;transform:translateY(-1px)}.option:disabled{cursor:default}.option.correct{background:rgba(46,213,115,.12);border-color:var(--ok)}.option.wrong{background:rgba(255,90,104,.12);border-color:var(--bad)}
+.letter{display:inline-flex;width:25px;height:25px;align-items:center;justify-content:center;border-radius:7px;background:#162b43;margin-right:8px;font-weight:800}
+.feedback{display:none;margin-top:17px;border-top:1px solid var(--line);padding-top:16px}.feedback.show{display:block}
+.result{font-weight:900;font-size:1.05rem;margin-bottom:11px}.result.ok{color:var(--ok)}.result.bad{color:var(--bad)}
+.comment{background:#091625;border:1px solid #1d3855;border-radius:14px;padding:14px;line-height:1.52}.comment h3{font-size:.88rem;margin:0 0 8px;color:#8fd0ff;text-transform:uppercase}.comment p{margin:7px 0;color:#e7edf5}
+.actions{display:flex;gap:9px;margin-top:16px}button.ctrl{border:0;border-radius:11px;padding:11px 15px;font-weight:800;cursor:pointer}.next{background:var(--accent);color:#031321;flex:1}.reset{background:#1b2e44;color:#d9e4ef}
+.final{display:none;text-align:center}.final.show{display:block}.final .big{font-size:2.1rem;font-weight:900;color:var(--accent)}.review{margin-top:15px;text-align:left}.small{font-size:.8rem;color:var(--muted)}
+@media(max-width:620px){.app{padding:8px 10px 34px}.section,.qcard{padding:14px}.brand h1{font-size:1.02rem}.quickgrid{grid-template-columns:1fr}.option{font-size:.9rem;padding:12px}.question{font-size:1rem}.stats{gap:5px}.stat{padding:7px 4px}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="topbar">
+  <div class="brand">
+    <h1>Aracaju — Política, Administração, Sociedade, Economia e Cultura</h1>
+    <div class="sub">Aula esquematizada + simulado IDECAN</div>
+  </div>
+  <div class="tabs">
+    <button id="tabLesson" class="tabbtn active" onclick="showPage('lesson')">📘 Aula Esquematizada</button>
+    <button id="tabQuiz" class="tabbtn" onclick="showPage('quiz')">📝 Simulado IDECAN</button>
+  </div>
+</div>
+
+<main id="lessonPage" class="page active">
+  <div class="hero">
+    <span class="badge">ROTEIRO DA AULA</span>
+    <h2>5 eixos que a aula trabalha</h2>
+    <p>Política, administração, sociedade, economia e cultura de Aracaju, organizados na mesma lógica do professor.</p>
+    <div class="quickgrid">
+      <div class="quick"><b>Poderes municipais</b>Executivo + Legislativo</div>
+      <div class="quick"><b>Divisão territorial</b>Distrito-sede único</div>
+      <div class="quick"><b>Economia</b>Predomínio do setor terciário</div>
+      <div class="quick"><b>Cultura</b>Religiosidade + forró + artesanato + teatro popular</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 01:17–05:45</div>
+    <h2>1. Poderes municipais e Administração Pública</h2>
+    <p>Na organização municipal apresentada na aula, Aracaju possui:</p>
+    <div class="schema">EXECUTIVO MUNICIPAL + LEGISLATIVO MUNICIPAL</div>
+    <p>Não existe <b>Poder Judiciário municipal</b>. O Judiciário presente na cidade está ligado às estruturas estadual e federal.</p>
+    <h3>Executivo</h3>
+    <p>É exercido pela Prefeitura Municipal, auxiliada pelas secretarias.</p>
+    <h3>Legislativo</h3>
+    <p>É exercido pela Câmara Municipal de Aracaju.</p>
+    <div class="trap"><b>Pegadinha:</b> “Aracaju possui Executivo, Legislativo e Judiciário municipais” = ERRADO.</div>
+  </div>
+
+  <div class="section">
+    <h2>2. Administração direta e indireta</h2>
+    <h3>Direta — exemplos citados</h3>
+    <ul>
+      <li>Gabinete do prefeito;</li>
+      <li>SEGOV;</li>
+      <li>SECOM;</li>
+      <li>Secretaria de Cultura;</li>
+      <li>Controladoria;</li>
+      <li>Procuradoria;</li>
+      <li>Planejamento;</li>
+      <li>Secretaria de Segurança e Cidadania.</li>
+    </ul>
+    <h3>Indireta — exemplos citados</h3>
+    <ul>
+      <li>AJUPREV;</li>
+      <li>SMTT;</li>
+      <li>FUNCAJU;</li>
+      <li>EMURB;</li>
+      <li>empresa municipal de serviços urbanos citada na aula.</li>
+    </ul>
+    <div class="schema">DIRETA = ÓRGÃOS E SECRETARIAS<br>INDIRETA = ENTIDADES COM PERSONALIDADE PRÓPRIA</div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 05:50–08:30</div>
+    <h2>3. Câmara Municipal e vereadores</h2>
+    <p>A aula informa que a Câmara Municipal é composta por <b>26 vereadores</b>.</p>
+    <div class="schema">CÂMARA MUNICIPAL DE ARACAJU → 26 VEREADORES</div>
+    <p>O professor destaca que a faixa populacional permitiria <b>até 27</b>, mas a Câmara possui 26.</p>
+    <div class="trap"><b>Pegadinha IDECAN:</b> 27 é o teto citado, não o número efetivo trabalhado na aula.</div>
+    <p>Funções lembradas: votar leis municipais, diretrizes orçamentárias e fiscalizar financeiramente o Executivo.</p>
+  </div>
+
+  <div class="section">
+    <h2>4. Símbolos municipais e brasão</h2>
+    <p>São trabalhados: <b>bandeira, brasão/selo e hino</b>.</p>
+    <div class="key">
+      <b>Cruz:</b> religiosidade.<br>
+      <b>Catavento:</b> antigas salinas / produção de sal.<br>
+      <b>Coqueiro:</b> presença do produto na cidade.<br>
+      <b>Roda dentária:</b> evolução do tempo e do trabalho.<br>
+      <b>Cavalos-marinhos:</b> caráter litorâneo.<br>
+      <b>Coroa de cinco torres:</b> condição de capital.
+    </div>
+    <p><b>Pax et Labor</b> = “Paz e Trabalho”.</p>
+  </div>
+
+  <div class="section">
+    <h2>5. Hino municipal</h2>
+    <p>A aula relembra um hino relacionado ao centenário de 1955 e destaca a escolha de um <b>novo hino em 2026</b>, ligado aos 171 anos da capital.</p>
+    <p>O edital do concurso do hino exigia referências à história, economia, cultura, tradições e figuras de Aracaju.</p>
+    <div class="schema">NOVO HINO DESTACADO NA AULA → 2026</div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 13:35–18:50</div>
+    <h2>6. Formação administrativa e divisão territorial</h2>
+    <p>O professor cita a criação como distrito em 1837 e a elevação a município e capital em 17 de março de 1855.</p>
+    <p>Em 1911, aparece com três distritos: Aracaju, Barra dos Coqueiros e Porto Grande.</p>
+    <p>Hoje, porém:</p>
+    <div class="schema">ARACAJU = APENAS 1 DISTRITO → DISTRITO-SEDE</div>
+    <p>A aula também afirma que o território municipal está sob perímetro urbano ou zona de expansão, sem zona rural municipal.</p>
+    <div class="key"><b>Bairros oficiais trabalhados na aula:</b> 48.</div>
+    <p>É destacada a reorganização da antiga zona de expansão e a criação do bairro <b>São José dos Náufragos</b>.</p>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 18:50–24:30</div>
+    <h2>7. Economia: setores e centralidade</h2>
+    <div class="key"><b>Primário:</b> agropecuária e extrativismo.<br><b>Secundário:</b> indústria e construção civil.<br><b>Terciário:</b> comércio, serviços, turismo e administração pública.</div>
+    <p>O principal setor econômico de Aracaju, segundo a aula, é:</p>
+    <div class="schema">SETOR TERCIÁRIO</div>
+    <p>Aracaju é apresentada como a maior economia de Sergipe e o município de maior PIB estadual.</p>
+    <div class="schema">MAIOR PIB DO ESTADO → ARACAJU</div>
+    <p>A aula cita PIB de 2023 em torno de <b>R$ 22,3 bilhões</b> e forte concentração da riqueza estadual na capital, associada à ideia de <b>macrocefalia econômica e urbana</b>.</p>
+  </div>
+
+  <div class="section">
+    <h2>8. PIB x PIB per capita</h2>
+    <p>Este é um dos maiores pontos de pegadinha da aula.</p>
+    <div class="schema">MAIOR PIB ESTADUAL = ARACAJU<br>MAIOR PIB PER CAPITA ≠ ARACAJU</div>
+    <p>O professor associa o maior PIB per capita a <b>Canindé de São Francisco</b>.</p>
+    <p>PIB per capita é o PIB dividido pelo número de habitantes; não significa salário recebido por cada pessoa.</p>
+  </div>
+
+  <div class="section">
+    <h2>9. Aspectos sociais</h2>
+    <p>A aula destaca <b>desigualdades e disparidades sociais</b> dentro do município, contrastando áreas periféricas e regiões mais valorizadas.</p>
+    <ul>
+      <li>dificuldades de infraestrutura em bairros periféricos;</li>
+      <li>desemprego e informalidade;</li>
+      <li>crescimento de trabalhos informais e “uberização”;</li>
+      <li>vulnerabilidade social de jovens em periferias.</li>
+    </ul>
+    <div class="schema">INDICADORES MÉDIOS NÃO SIGNIFICAM IGUALDADE SOCIAL</div>
+  </div>
+
+  <div class="section">
+    <h2>10. Cadastro Único e benefícios</h2>
+    <p>A maior parte dos inscritos no Cadastro Único citados na aula é formada por <b>mulheres</b>, com destaque para a faixa de 25 a 34 anos.</p>
+    <div class="key"><b>Correção feita pelo professor:</b> cerca de 134 mil pessoas no Bolsa Família e 7.198 no Auxílio Gás, conforme os números apresentados e corrigidos durante a aula.</div>
+    <div class="trap"><b>Atenção:</b> o professor inicialmente associa 7.198 ao Bolsa Família e depois corrige: 7.198 era Auxílio Gás.</div>
+  </div>
+
+  <div class="section">
+    <h2>11. Cultura e religiosidade</h2>
+    <p>Cultura é tratada de forma ampla: dança, teatro, artesanato, culinária, fé, formas de vida e tradições.</p>
+    <p>A padroeira de Aracaju apresentada é:</p>
+    <div class="schema">NOSSA SENHORA DA CONCEIÇÃO → 8 DE DEZEMBRO</div>
+    <p>No sincretismo religioso trabalhado na aula, Nossa Senhora da Conceição é associada a <b>Oxum</b>.</p>
+    <p>A aula também cita a lavagem das escadarias da Catedral Metropolitana.</p>
+  </div>
+
+  <div class="section">
+    <h2>12. Festejos juninos</h2>
+    <ul>
+      <li><b>Forró Caju</b>;</li>
+      <li><b>Arraiá do Povo</b>;</li>
+      <li>quadrilhas juninas;</li>
+      <li>eventos no Centro de Criatividade;</li>
+      <li>eventos no Complexo Cultural Gonzagão.</li>
+    </ul>
+    <div class="schema">ARRAIÁ DO POVO → MAIOR ARRAIÁ À BEIRA-MAR DO BRASIL (como apresentado na aula)</div>
+  </div>
+
+  <div class="section">
+    <h2>13. Artesanato e Mamulengo Cheiroso</h2>
+    <p>O professor destaca técnicas de artesanato como <b>redendê/rendendê e etamine</b>, além da forte presença do comércio de artesanato nos mercados municipais.</p>
+    <p>O <b>Mamulengo Cheiroso</b> é apresentado como:</p>
+    <div class="schema">GRUPO ARACAJUANO DE TEATRO DE BONECOS</div>
+    <p>A aula o situa na segunda metade do século XX e menciona 1978 como referência possível de prova.</p>
+  </div>
+
+  <div class="section">
+    <span class="badge">NATA PARA A PROVA</span>
+    <h2>Resumo final</h2>
+    <div class="schema">
+      MUNICÍPIO → EXECUTIVO + LEGISLATIVO<br>
+      JUDICIÁRIO MUNICIPAL → NÃO EXISTE<br><br>
+      CÂMARA → 26 VEREADORES<br><br>
+      DIVISÃO → DISTRITO-SEDE ÚNICO<br>
+      BAIRROS → 48<br><br>
+      ECONOMIA → TERCIÁRIO<br>
+      MAIOR PIB ESTADUAL → ARACAJU<br>
+      MAIOR PIB PER CAPITA → NÃO É ARACAJU<br><br>
+      CULTURA → NOSSA SENHORA DA CONCEIÇÃO / OXUM<br>
+      DATA → 8 DE DEZEMBRO<br>
+      JUNHO → FORRÓ CAJU + ARRAIÁ DO POVO<br>
+      MAMULENGO CHEIROSO → TEATRO DE BONECOS
+    </div>
+  </div>
+</main>
+
+<main id="quizPage" class="page">
+  <div class="hero">
+    <span class="badge">SIMULADO IDECAN</span>
+    <h2>Questões da aula</h2>
+    <p>25 questões A–E com alternativas embaralhadas, correção instantânea e comentário esquematizado.</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><b id="current">1/25</b><span>QUESTÃO</span></div>
+    <div class="stat"><b id="hits">0</b><span>ACERTOS</span></div>
+    <div class="stat"><b id="misses">0</b><span>ERROS</span></div>
+    <div class="stat"><b id="rate">0%</b><span>APROVEIT.</span></div>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+  <div id="quizCard" class="qcard">
+    <span class="badge">A–E • ESTILO IDECAN</span>
+    <div id="qnum" class="qnum"></div>
+    <div id="question" class="question"></div>
+    <div id="options" class="options"></div>
+    <div id="feedback" class="feedback">
+      <div id="result" class="result"></div>
+      <div id="comment" class="comment"></div>
+      <div class="actions"><button class="ctrl next" id="nextBtn">Próxima questão →</button></div>
+    </div>
+  </div>
+  <div id="final" class="qcard final">
+    <span class="badge">RESULTADO FINAL</span>
+    <div style="margin-top:14px" class="big" id="finalScore"></div>
+    <p id="finalText"></p>
+    <div class="review" id="review"></div>
+    <button class="ctrl reset" onclick="restart()">Refazer simulado</button>
+  </div>
+</main>
+</div>
+
+<script>
+function showPage(page){const lesson=page==='lesson';document.getElementById('lessonPage').classList.toggle('active',lesson);document.getElementById('quizPage').classList.toggle('active',!lesson);document.getElementById('tabLesson').classList.toggle('active',lesson);document.getElementById('tabQuiz').classList.toggle('active',!lesson);window.scrollTo({top:0,behavior:'smooth'})}
+function shuffledQuestion(q){const opts=q.a.map((text,i)=>({text,correct:i===q.c}));for(let i=opts.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[opts[i],opts[j]]=[opts[j],opts[i]]}return {...q,a:opts.map(x=>x.text),c:opts.findIndex(x=>x.correct)}}
+const questionBank=[
+{q:"No âmbito municipal, os poderes que organizam diretamente Aracaju, segundo a aula, são:",a:["Executivo, Legislativo e Judiciário municipais.","Executivo e Legislativo.","Legislativo e Judiciário.","Executivo e Judiciário.","Somente Executivo."],c:1,com:`<h3>Comentário</h3><div class="schema">MUNICÍPIO → EXECUTIVO + LEGISLATIVO</div><p>Não existe Poder Judiciário municipal.</p>`},
+{q:"O Poder Legislativo municipal de Aracaju é exercido pela:",a:["Prefeitura Municipal.","Câmara Municipal.","Procuradoria Geral.","Assembleia Legislativa.","Secretaria de Governo."],c:1,com:`<h3>Comentário</h3><p>O Legislativo municipal é a <b>Câmara Municipal de Aracaju</b>.</p>`},
+{q:"Quantos vereadores compõem a Câmara Municipal de Aracaju segundo a aula?",a:["21.","23.","25.","26.","27."],c:3,com:`<h3>Comentário</h3><div class="schema">CÂMARA DE ARACAJU = 26 VEREADORES</div><div class="trap"><b>Pegadinha:</b> 27 aparece como máximo possível, não como composição efetiva.</div>`},
+{q:"Assinale a alternativa correta sobre o Poder Judiciário em Aracaju.",a:["Existe Judiciário municipal próprio.","O prefeito exerce funções judiciais municipais.","Não existe Poder Judiciário municipal.","A Câmara Municipal exerce o Judiciário.","O Judiciário municipal é composto por 26 membros."],c:2,com:`<h3>Comentário</h3><p>Há órgãos judiciais na cidade, mas eles não formam um <b>Poder Judiciário municipal</b>.</p>`},
+{q:"Na aula, a AJUPREV é citada como exemplo de:",a:["Administração direta.","Administração indireta.","Poder Legislativo.","Órgão do Judiciário.","Secretaria estadual."],c:1,com:`<h3>Comentário</h3><p>A AJUPREV aparece entre as entidades da <b>administração indireta</b>.</p>`},
+{q:"No brasão de Aracaju, o catavento é relacionado a:",a:["Pesca artesanal.","Antigas salinas e produção de sal.","Indústria têxtil.","Transferência da capital.","Cultura junina."],c:1,com:`<h3>Comentário</h3><div class="schema">CATAVENTO → SALINAS / PRODUÇÃO DE SAL</div>`},
+{q:"No brasão, os cavalos-marinhos representam:",a:["A condição de capital.","A religiosidade.","O caráter litorâneo da cidade.","A indústria.","A agricultura."],c:2,com:`<h3>Comentário</h3><p>Representam Aracaju como cidade <b>litorânea/costeira</b>.</p>`},
+{q:"A expressão latina 'Pax et Labor' é traduzida na aula como:",a:["Ordem e Progresso.","Fé e Trabalho.","Paz e Trabalho.","Paz e Justiça.","Trabalho e Liberdade."],c:2,com:`<h3>Comentário</h3><div class="schema">PAX ET LABOR = PAZ E TRABALHO</div>`},
+{q:"O novo hino municipal destacado pelo professor foi escolhido em:",a:["1955.","1989.","2021.","2024.","2026."],c:4,com:`<h3>Comentário</h3><p>A aula destaca a escolha do novo hino em <b>2026</b>.</p>`},
+{q:"Atualmente, Aracaju é constituída administrativamente por:",a:["Três distritos.","Dois distritos.","Um único distrito-sede.","Cinco distritos.","48 distritos."],c:2,com:`<h3>Comentário</h3><div class="schema">ARACAJU → 1 DISTRITO → DISTRITO-SEDE</div>`},
+{q:"O número de bairros oficiais trabalhado na aula é:",a:["26.","32.","40.","48.","55."],c:3,com:`<h3>Comentário</h3><p>A aula cita <b>48 bairros oficiais</b>.</p>`},
+{q:"Qual bairro é destacado como resultado recente da reorganização da antiga zona de expansão?",a:["Santo Antônio.","São José dos Náufragos.","Industrial.","Getúlio Vargas.","Centro."],c:1,com:`<h3>Comentário</h3><p>O professor destaca <b>São José dos Náufragos</b>.</p>`},
+{q:"O principal setor econômico de Aracaju é o:",a:["Primário.","Secundário.","Terciário.","Extrativista mineral.","Agropecuário."],c:2,com:`<h3>Comentário</h3><div class="schema">ARACAJU → SETOR TERCIÁRIO</div><p>Comércio, serviços, turismo e administração pública.</p>`},
+{q:"O setor secundário corresponde principalmente a:",a:["Agropecuária e extrativismo.","Comércio e turismo.","Indústria e construção civil.","Serviços públicos.","Pesca artesanal."],c:2,com:`<h3>Comentário</h3><p>Secundário = <b>indústria + construção civil</b>.</p>`},
+{q:"A maior economia estadual, em PIB total, é apresentada como:",a:["Nossa Senhora do Socorro.","Itabaiana.","Canindé de São Francisco.","Aracaju.","Laranjeiras."],c:3,com:`<h3>Comentário</h3><div class="schema">MAIOR PIB DE SERGIPE → ARACAJU</div>`},
+{q:"Segundo a aula, o maior PIB per capita do estado:",a:["Também pertence a Aracaju.","É associado a Canindé de São Francisco.","É de Nossa Senhora do Socorro.","É de Barra dos Coqueiros.","É de São Cristóvão."],c:1,com:`<h3>Comentário</h3><div class="schema">PIB TOTAL → ARACAJU<br>PIB PER CAPITA → CANINDÉ DE SÃO FRANCISCO</div>`},
+{q:"PIB per capita corresponde:",a:["Ao salário médio de todos os moradores.","Ao PIB dividido pelo número de habitantes.","Ao total de impostos municipais.","À renda apenas dos trabalhadores formais.","Ao valor do orçamento da Prefeitura."],c:1,com:`<h3>Comentário</h3><p>Não representa salário recebido por cada cidadão.</p>`},
+{q:"A ideia de macrocefalia econômica trabalhada na aula está ligada a:",a:["Distribuição uniforme da riqueza.","Concentração de atividade econômica na capital.","Predomínio rural.","Ausência de serviços.","Redução populacional."],c:1,com:`<h3>Comentário</h3><p>Aracaju concentra riqueza, empregos, serviços e população.</p><div class="schema">CONCENTRAÇÃO NA CAPITAL → MACROCEFALIA</div>`},
+{q:"Nos aspectos sociais, a aula destaca que Aracaju:",a:["Apresenta indicadores homogêneos em todos os bairros.","Não possui desigualdade social.","Apresenta disparidades sociais internas.","Não possui trabalho informal.","Possui apenas empregos formais."],c:2,com:`<h3>Comentário</h3><p>A aula enfatiza <b>desigualdades territoriais e sociais</b>.</p>`},
+{q:"A maior parte dos inscritos no Cadastro Único mencionados na aula é composta por:",a:["Homens.","Mulheres.","Crianças apenas.","Idosos apenas.","Estrangeiros."],c:1,com:`<h3>Comentário</h3><p>O professor destaca predominância de <b>mulheres</b>.</p>`},
+{q:"Após a correção feita pelo próprio professor, o número de 7.198 refere-se a beneficiários do:",a:["Bolsa Família.","Auxílio Gás.","Seguro-desemprego.","BPC.","Auxílio-moradia."],c:1,com:`<h3>Comentário</h3><p>Ele primeiro se confunde e depois corrige.</p><div class="schema">7.198 → AUXÍLIO GÁS<br>≈134 MIL → BOLSA FAMÍLIA</div>`},
+{q:"A padroeira de Aracaju indicada na aula é:",a:["Nossa Senhora de Fátima.","Santa Luzia.","Nossa Senhora da Conceição.","Nossa Senhora Aparecida.","Santa Rita."],c:2,com:`<h3>Comentário</h3><div class="schema">PADROEIRA → NOSSA SENHORA DA CONCEIÇÃO</div>`},
+{q:"A festa da padroeira é celebrada em:",a:["17 de março.","24 de junho.","8 de dezembro.","7 de setembro.","12 de outubro."],c:2,com:`<h3>Comentário</h3><p>Data destacada: <b>8 de dezembro</b>.</p>`},
+{q:"No sincretismo religioso trabalhado na aula, Nossa Senhora da Conceição é associada a:",a:["Iemanjá.","Oxum.","Xangô.","Ogum.","Iansã."],c:1,com:`<h3>Comentário</h3><div class="schema">NOSSA SENHORA DA CONCEIÇÃO ↔ OXUM</div>`},
+{q:"O Mamulengo Cheiroso é apresentado como:",a:["Grupo de dança junina.","Grupo aracajuano de teatro de bonecos.","Técnica de bordado.","Festa religiosa.","Mercado de artesanato."],c:1,com:`<h3>Comentário</h3><p>É um tradicional <b>grupo de teatro de bonecos</b> de Aracaju.</p>`}
+];
+let questions=questionBank.map(shuffledQuestion),idx=0,hits=0,misses=0,answered=false;const wrongList=[];
+function render(){const q=questions[idx];answered=false;document.getElementById("current").textContent=`${idx+1}/${questions.length}`;document.getElementById("qnum").textContent=`QUESTÃO ${String(idx+1).padStart(2,"0")} DE ${questions.length}`;document.getElementById("question").textContent=q.q;document.getElementById("feedback").classList.remove("show");const box=document.getElementById("options");box.innerHTML="";q.a.forEach((t,i)=>{const b=document.createElement("button");b.className="option";b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span>${t}`;b.onclick=()=>answer(i,b);box.appendChild(b)});updateStats()}
+function answer(i,btn){if(answered)return;answered=true;const q=questions[idx],buttons=[...document.querySelectorAll(".option")];buttons.forEach(x=>x.disabled=true);buttons[q.c].classList.add("correct");const res=document.getElementById("result");if(i===q.c){hits++;res.textContent="✓ ACERTOU!";res.className="result ok"}else{misses++;wrongList.push(idx);btn.classList.add("wrong");res.textContent=`✕ ERROU. Gabarito: ${String.fromCharCode(65+q.c)}`;res.className="result bad"}document.getElementById("comment").innerHTML=q.com;document.getElementById("feedback").classList.add("show");document.getElementById("nextBtn").textContent=idx===questions.length-1?"Ver resultado →":"Próxima questão →";updateStats();setTimeout(()=>document.getElementById("feedback").scrollIntoView({behavior:"smooth",block:"nearest"}),100)}
+function updateStats(){document.getElementById("hits").textContent=hits;document.getElementById("misses").textContent=misses;const total=hits+misses;document.getElementById("rate").textContent=total?Math.round(hits/total*100)+"%":"0%";document.getElementById("bar").style.width=((total/questions.length)*100)+"%"}
+document.getElementById("nextBtn").onclick=()=>{if(idx<questions.length-1){idx++;render();window.scrollTo({top:0,behavior:"smooth"})}else finish()};
+function finish(){document.getElementById("quizCard").style.display="none";const f=document.getElementById("final");f.classList.add("show");const pct=Math.round(hits/questions.length*100);document.getElementById("finalScore").textContent=`${hits}/${questions.length} • ${pct}%`;document.getElementById("finalText").textContent=pct>=90?"Excelente. Conteúdo muito bem dominado.":pct>=75?"Bom desempenho. Revise os erros.":pct>=60?"Base razoável. Releia os pontos errados.":"Revise a aula esquematizada e refaça.";const rv=document.getElementById("review");rv.innerHTML=wrongList.length?"<h3 style='color:#ffbdc3'>Pontos para revisar</h3>"+wrongList.map(n=>`<div class="small" style="margin:7px 0">• Questão ${n+1}: ${questions[n].q}</div>`).join(""):"<p style='color:#2ed573;font-weight:800'>Você não errou nenhuma questão.</p>";window.scrollTo({top:0,behavior:"smooth"})}
+function restart(){questions=questionBank.map(shuffledQuestion);idx=0;hits=0;misses=0;wrongList.length=0;document.getElementById("final").classList.remove("show");document.getElementById("quizCard").style.display="block";render();window.scrollTo({top:0,behavior:"smooth"})}
+render();
+</script>
+</body>
+</html>
