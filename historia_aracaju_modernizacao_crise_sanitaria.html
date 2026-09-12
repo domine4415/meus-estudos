@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>História de Aracaju — Modernização e Crise Sanitária</title>
+<style>
+:root{
+  --bg:#07111f;--card:#0d1b2d;--text:#f5f7fb;--muted:#a9b7c9;
+  --line:#203752;--accent:#5bbcff;--ok:#2ed573;--bad:#ff5a68;
+  --warn:#ffd166;--purple:#b49cff
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#06101d,#09182a 45%,#07111f);
+  color:var(--text);min-height:100vh
+}
+.app{max-width:920px;margin:0 auto;padding:14px 14px 48px}
+.topbar{
+  position:sticky;top:0;z-index:20;background:rgba(7,17,31,.95);
+  backdrop-filter:blur(12px);padding:10px 0 12px;border-bottom:1px solid var(--line)
+}
+.brand h1{font-size:1.18rem;margin:0 0 4px}
+.brand .sub{color:var(--muted);font-size:.82rem}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.tabbtn{
+  border:1px solid var(--line);background:var(--card);color:var(--muted);
+  padding:11px;border-radius:12px;font-weight:800;cursor:pointer
+}
+.tabbtn.active{
+  background:linear-gradient(180deg,#123455,#0e2a47);
+  color:white;border-color:#315a80
+}
+.page{display:none}.page.active{display:block}
+.hero{
+  background:linear-gradient(135deg,#0f2945,#101d31);border:1px solid #254663;
+  border-radius:18px;padding:18px;margin-top:16px
+}
+.hero h2{margin:0 0 7px;font-size:1.15rem}
+.hero p{margin:0;color:#d7e3ef;line-height:1.5}
+.quickgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}
+.quick{background:#0b1727;border:1px solid var(--line);border-radius:12px;padding:11px}
+.quick b{display:block;color:#8fd0ff;margin-bottom:3px}
+.section{
+  margin-top:16px;background:var(--card);border:1px solid var(--line);
+  border-radius:17px;padding:17px;box-shadow:0 14px 40px rgba(0,0,0,.16)
+}
+.section h2{font-size:1rem;margin:0 0 11px;color:#91d1ff}
+.section h3{font-size:.91rem;margin:14px 0 7px;color:#dbe9f6}
+.section p,.section li{line-height:1.52;color:#e7edf5}
+.section ul{padding-left:19px;margin:8px 0}
+.badge{
+  display:inline-block;padding:5px 9px;border-radius:999px;background:#132c46;
+  color:#8fd0ff;font-weight:800;font-size:.7rem;letter-spacing:.04em;margin-bottom:8px
+}
+.schema{
+  margin:10px 0;padding:12px;border-radius:12px;background:#0f2237;
+  border-left:4px solid var(--warn);font-weight:800;line-height:1.72
+}
+.trap{
+  margin-top:10px;padding:10px 12px;border-radius:11px;
+  background:rgba(180,156,255,.08);border:1px solid rgba(180,156,255,.25)
+}
+.trap b{color:var(--purple)}
+.key{
+  padding:10px 12px;border-radius:12px;background:rgba(91,188,255,.08);
+  border:1px solid rgba(91,188,255,.24);margin:9px 0
+}
+.timeline{color:#ffd98a;font-weight:900;font-size:.78rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center}
+.stat b{display:block;font-size:1.02rem}.stat span{font-size:.68rem;color:var(--muted)}
+.progress{height:7px;background:#17283c;border-radius:99px;overflow:hidden;margin-top:10px}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--purple));transition:.25s}
+.qcard{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.qnum{color:var(--muted);font-size:.82rem;margin:9px 0 7px}
+.question{font-size:1.07rem;line-height:1.55;font-weight:800;margin:0 0 16px}
+.options{display:grid;gap:10px}
+.option{
+  width:100%;text-align:left;border:1px solid #2b405a;background:#0a1728;color:var(--text);
+  padding:13px 14px;border-radius:13px;cursor:pointer;font-size:.94rem;line-height:1.42;transition:.15s
+}
+.option:hover{border-color:#4f7399;transform:translateY(-1px)}
+.option:disabled{cursor:default}
+.option.correct{background:rgba(46,213,115,.12);border-color:var(--ok)}
+.option.wrong{background:rgba(255,90,104,.12);border-color:var(--bad)}
+.letter{
+  display:inline-flex;width:25px;height:25px;align-items:center;justify-content:center;
+  border-radius:7px;background:#162b43;margin-right:8px;font-weight:800
+}
+.feedback{display:none;margin-top:17px;border-top:1px solid var(--line);padding-top:16px}
+.feedback.show{display:block}
+.result{font-weight:900;font-size:1.05rem;margin-bottom:11px}
+.result.ok{color:var(--ok)}.result.bad{color:var(--bad)}
+.comment{
+  background:#091625;border:1px solid #1d3855;border-radius:14px;
+  padding:14px;line-height:1.52
+}
+.comment h3{font-size:.88rem;margin:0 0 8px;color:#8fd0ff;text-transform:uppercase}
+.comment p{margin:7px 0;color:#e7edf5}
+.actions{display:flex;gap:9px;margin-top:16px}
+button.ctrl{border:0;border-radius:11px;padding:11px 15px;font-weight:800;cursor:pointer}
+.next{background:var(--accent);color:#031321;flex:1}
+.reset{background:#1b2e44;color:#d9e4ef}
+.final{display:none;text-align:center}.final.show{display:block}
+.final .big{font-size:2.1rem;font-weight:900;color:var(--accent)}
+.review{margin-top:15px;text-align:left}.small{font-size:.8rem;color:var(--muted)}
+@media(max-width:620px){
+ .app{padding:8px 10px 34px}.section,.qcard{padding:14px}
+ .brand h1{font-size:1.02rem}.quickgrid{grid-template-columns:1fr}
+ .option{font-size:.9rem;padding:12px}.question{font-size:1rem}
+ .stats{gap:5px}.stat{padding:7px 4px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="topbar">
+  <div class="brand">
+    <h1>História de Aracaju — Modernização e Crise Sanitária</h1>
+    <div class="sub">Aula esquematizada + simulado IDECAN</div>
+  </div>
+  <div class="tabs">
+    <button id="tabLesson" class="tabbtn active" onclick="showPage('lesson')">📘 Aula Esquematizada</button>
+    <button id="tabQuiz" class="tabbtn" onclick="showPage('quiz')">📝 Simulado IDECAN</button>
+  </div>
+</div>
+
+<main id="lessonPage" class="page active">
+  <div class="hero">
+    <span class="badge">ROTEIRO DA AULA</span>
+    <h2>Modernização, higienismo e exclusão socioespacial</h2>
+    <p>Da cidade planejada à Cidade de Palha: epidemias, bondes, fiscalização sanitária, periferização, exploração operária e crise de 1919.</p>
+    <div class="quickgrid">
+      <div class="quick"><b>Contraste urbano</b>Quadrado de Pirro × Cidade de Palha</div>
+      <div class="quick"><b>Problema central</b>Modernização com exclusão</div>
+      <div class="quick"><b>Crise sanitária</b>Peste, varíola e gripe espanhola</div>
+      <div class="quick"><b>Desfecho social</b>Greve de 1919</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 00:33–04:50</div>
+    <h2>1. Modernização e crise sanitária</h2>
+    <p>A aula situa os problemas estruturais de Aracaju entre a segunda metade do século XIX e as primeiras décadas do século XX.</p>
+    <div class="schema">
+      CAPITAL CONSTRUÍDA ÀS PRESSAS<br>
+      ↓<br>
+      PROBLEMAS URBANOS + SOCIAIS + SANITÁRIOS
+    </div>
+    <p>A cidade planejada não conseguia absorver de forma adequada o crescimento populacional e os grupos empobrecidos.</p>
+  </div>
+
+  <div class="section">
+    <h2>2. Lei Áurea e formação da Cidade de Palha</h2>
+    <p>Após 1888, ex-escravizados libertos sem acesso adequado a terra, emprego e renda passam a compor parte importante da população marginalizada.</p>
+    <p>A aula também cita retirantes vindos do sertão em busca de melhores condições.</p>
+    <div class="schema">
+      EX-ESCRAVIZADOS + RETIRANTES + POBREZA<br>
+      ↓<br>
+      OCUPAÇÃO DAS MARGENS DA CIDADE<br>
+      ↓<br>
+      CIDADE DE PALHA
+    </div>
+    <div class="trap"><b>Pegadinha:</b> a Cidade de Palha não foi um bairro planejado pelo governo; surge da exclusão social e da ocupação periférica.</div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 04:57–07:25</div>
+    <h2>3. Visita de D. Pedro II e discurso de modernidade</h2>
+    <p>A aula menciona a visita imperial de <b>D. Pedro II em 1860</b>.</p>
+    <p>É associada ao período a criação/uso da <b>Ponte do Imperador</b>, próxima à Praça Fausto Cardoso.</p>
+    <div class="schema">
+      MODERNIZAÇÃO → EUROPEIZAÇÃO → ORDEM + PROGRESSO + EMBELEZAMENTO
+    </div>
+    <p>O discurso modernizador buscava aproximar Aracaju dos padrões urbanos europeus daquele período.</p>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 08:05–09:45</div>
+    <h2>4. Epidemias e falta de infraestrutura</h2>
+    <p>A aula destaca surtos de:</p>
+    <ul>
+      <li>peste bubônica;</li>
+      <li>varíola;</li>
+      <li>gripe espanhola.</li>
+    </ul>
+    <div class="schema">
+      CRESCIMENTO POPULACIONAL + POUCA INFRAESTRUTURA<br>
+      ↓<br>
+      CRISE SANITÁRIA
+    </div>
+    <p>O professor relaciona as epidemias não apenas às moradias precárias, mas também à ausência de estrutura pública suficiente.</p>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 09:45–11:35</div>
+    <h2>5. Bondes e modernização do transporte</h2>
+    <p>O transporte urbano aparece como símbolo de modernização.</p>
+    <div class="schema">
+      BONDES DE TRAÇÃO ANIMAL<br>
+      ↓<br>
+      BONDES ELÉTRICOS
+    </div>
+    <p>Os bondes circulavam por áreas centrais, como a atual Avenida Rio Branco e proximidades do mercado.</p>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 11:38–15:40</div>
+    <h2>6. A dualidade urbana</h2>
+    <p>A aula trabalha um contraste muito importante:</p>
+    <div class="schema">
+      QUADRADO DE PIRRO<br>
+      = CENTRO PLANEJADO + ILUMINADO + MODERNO<br><br>
+      CIDADE DE PALHA<br>
+      = PERIFERIA + MORADIAS PRECÁRIAS + EXCLUSÃO
+    </div>
+    <p>O centro recebia investimentos em iluminação, calçamento, saneamento e policiamento, enquanto as margens eram tratadas como problema urbano.</p>
+  </div>
+
+  <div class="section">
+    <h2>7. Higienismo e culpabilização dos pobres</h2>
+    <p>Segundo a aula, o discurso higienista frequentemente responsabilizava a população pobre pela disseminação das doenças.</p>
+    <div class="schema">
+      DOENÇA / EPIDEMIA<br>
+      ↓<br>
+      DISCURSO HIGIENISTA<br>
+      ↓<br>
+      CULPABILIZAÇÃO DAS CAMADAS POPULARES
+    </div>
+    <p>O professor ressalta que havia também um problema estrutural de saneamento, infraestrutura e desigualdade.</p>
+  </div>
+
+  <div class="section">
+    <h2>8. Controle social e fiscalização sanitária</h2>
+    <p>As autoridades sanitárias receberam amplos poderes.</p>
+    <ul>
+      <li>inspecionar habitações;</li>
+      <li>interditar casas;</li>
+      <li>retirar ou destruir objetos considerados contaminados;</li>
+      <li>impor regras sanitárias;</li>
+      <li>controlar atividades urbanas.</li>
+    </ul>
+    <div class="schema">
+      HIGIENISMO → FISCALIZAÇÃO → CONTROLE DO COTIDIANO
+    </div>
+    <p>Também aparecem medidas como proibição de animais soltos e exigência de licença para vendedores ambulantes.</p>
+  </div>
+
+  <div class="section">
+    <h2>9. “Teias de aranha” e reforma urbana</h2>
+    <p>O professor usa a expressão <b>“teias de aranha”</b> para ruas sinuosas, irregulares e sem planejamento das áreas populares.</p>
+    <div class="schema">
+      CENTRO → RETO / SIMÉTRICO / PLANEJADO<br>
+      PERIFERIA → VIAS IRREGULARES / “TEIAS DE ARANHA”
+    </div>
+    <p>A eliminação dessas vias e moradias era apresentada como parte da limpeza e modernização estética da cidade.</p>
+  </div>
+
+  <div class="section">
+    <h2>10. Belle Époque sergipana</h2>
+    <p>A aula relaciona a modernização urbana ao ideal de <b>Belle Époque</b>.</p>
+    <div class="schema">
+      BELLE ÉPOQUE → MODERNIDADE + TECNOLOGIA + EMBELEZAMENTO + EUROPEIZAÇÃO
+    </div>
+    <p>Em Aracaju, esse ideal conviveu com forte desigualdade social.</p>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 17:41–20:10</div>
+    <h2>11. Bairro Industrial e exploração operária</h2>
+    <p>O Bairro Industrial aparece como espaço ligado à concentração de operários e fábricas.</p>
+    <p>A aula destaca condições de trabalho duríssimas:</p>
+    <ul>
+      <li>jornadas de 14 a 16 horas;</li>
+      <li>trabalho de mulheres;</li>
+      <li>trabalho infantil;</li>
+      <li>quase inexistência de direitos trabalhistas.</li>
+    </ul>
+    <div class="schema">
+      EXCLUSÃO SOCIAL + EXPLORAÇÃO OPERÁRIA<br>
+      ↓<br>
+      TENSÃO SOCIAL
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 20:10–22:10</div>
+    <h2>12. Crise de 1919</h2>
+    <p>A aula relaciona a Greve de 1919 ao acúmulo de problemas:</p>
+    <div class="schema">
+      POBRES EXCLUÍDOS<br>
+      +<br>
+      TRABALHADORES EXPLORADOS<br>
+      ↓<br>
+      GREVE / CRISE DE 1919
+    </div>
+    <p>O governo de Pereira Lobo aparece associado a um discurso oficial de prosperidade e modernização, apesar das contradições sociais.</p>
+  </div>
+
+  <div class="section">
+    <h2>13. Centro planejado x periferia</h2>
+    <p>Nas questões finais, a aula reforça que o plano urbano funcionava também como uma barreira socioespacial.</p>
+    <div class="schema">
+      CENTRO HIGIENIZADO → ELITES + BUROCRACIA + ADMINISTRAÇÃO<br>
+      PERIFERIA → POBRES + PÂNTANOS + ÁREAS ALAGADIÇAS
+    </div>
+    <div class="trap"><b>Pegadinha:</b> a periferia não recebia os mesmos investimentos do centro.</div>
+  </div>
+
+  <div class="section">
+    <h2>14. Imprensa e imagem da cidade</h2>
+    <p>A imprensa reproduzia a contradição:</p>
+    <ul>
+      <li>celebrava praças iluminadas e hábitos das elites;</li>
+      <li>associava bairros periféricos à desordem, doença e perigo.</li>
+    </ul>
+    <div class="schema">
+      CENTRO → “VITRINE DA MODERNIDADE”<br>
+      PERIFERIA → “PROBLEMA A SER CORRIGIDO”
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="badge">NATA PARA A PROVA</span>
+    <h2>Resumo final</h2>
+    <div class="schema">
+      MODERNIZAÇÃO ≠ IGUALDADE<br><br>
+      QUADRADO DE PIRRO = CENTRO PLANEJADO<br>
+      CIDADE DE PALHA = PERIFERIA EXCLUÍDA<br><br>
+      LEI ÁUREA + RETIRANTES → CRESCIMENTO PERIFÉRICO<br><br>
+      CRISE SANITÁRIA → PESTE + VARÍOLA + GRIPE ESPANHOLA<br><br>
+      HIGIENISMO → CONTROLE SOCIAL<br><br>
+      BONDES → TRAÇÃO ANIMAL → ELÉTRICOS<br><br>
+      BAIRRO INDUSTRIAL → EXPLORAÇÃO OPERÁRIA<br><br>
+      EXCLUSÃO + EXPLORAÇÃO → GREVE DE 1919
+    </div>
+  </div>
+</main>
+
+<main id="quizPage" class="page">
+  <div class="hero">
+    <span class="badge">SIMULADO IDECAN</span>
+    <h2>Questões da aula</h2>
+    <p>25 questões A–E, alternativas embaralhadas, correção imediata e comentário esquematizado.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="current">1/25</b><span>QUESTÃO</span></div>
+    <div class="stat"><b id="hits">0</b><span>ACERTOS</span></div>
+    <div class="stat"><b id="misses">0</b><span>ERROS</span></div>
+    <div class="stat"><b id="rate">0%</b><span>APROVEIT.</span></div>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+
+  <div id="quizCard" class="qcard">
+    <span class="badge">A–E • ESTILO IDECAN</span>
+    <div id="qnum" class="qnum"></div>
+    <div id="question" class="question"></div>
+    <div id="options" class="options"></div>
+    <div id="feedback" class="feedback">
+      <div id="result" class="result"></div>
+      <div id="comment" class="comment"></div>
+      <div class="actions"><button class="ctrl next" id="nextBtn">Próxima questão →</button></div>
+    </div>
+  </div>
+
+  <div id="final" class="qcard final">
+    <span class="badge">RESULTADO FINAL</span>
+    <div style="margin-top:14px" class="big" id="finalScore"></div>
+    <p id="finalText"></p>
+    <div class="review" id="review"></div>
+    <button class="ctrl reset" onclick="restart()">Refazer simulado</button>
+  </div>
+</main>
+</div>
+
+<script>
+function showPage(page){
+  const lesson=page==='lesson';
+  document.getElementById('lessonPage').classList.toggle('active',lesson);
+  document.getElementById('quizPage').classList.toggle('active',!lesson);
+  document.getElementById('tabLesson').classList.toggle('active',lesson);
+  document.getElementById('tabQuiz').classList.toggle('active',!lesson);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function shuffledQuestion(q){
+  const opts=q.a.map((text,i)=>({text,correct:i===q.c}));
+  for(let i=opts.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [opts[i],opts[j]]=[opts[j],opts[i]];
+  }
+  return {...q,a:opts.map(x=>x.text),c:opts.findIndex(x=>x.correct)};
+}
+const questionBank=[
+{q:"A principal contradição urbana trabalhada na aula é:",a:["Centro rural versus periferia industrial.","Quadrado de Pirro moderno versus Cidade de Palha marginalizada.","Zona Sul versus sertão.","Aracaju versus São Cristóvão.","Centro industrial versus litoral turístico."],c:1,com:`<h3>Comentário</h3><div class="schema">QUADRADO DE PIRRO ↔ CIDADE DE PALHA</div><p>Modernidade de um lado; exclusão do outro.</p>`},
+{q:"A Cidade de Palha é associada principalmente a:",a:["Área planejada das elites.","Ocupações periféricas populares e precárias.","Zona comercial central.","Bairro aristocrático.","Área portuária planejada."],c:1,com:`<h3>Comentário</h3><p>É a face periférica, pobre e marginalizada da cidade.</p>`},
+{q:"Um fator social importante para o crescimento da Cidade de Palha foi:",a:["A imigração de banqueiros.","A libertação de escravizados sem adequada inclusão social.","A expansão do turismo.","A criação de universidades.","A mineração."],c:1,com:`<h3>Comentário</h3><div class="schema">1888 → LIBERDADE SEM INCLUSÃO → PERIFERIZAÇÃO</div>`},
+{q:"Além de ex-escravizados, a aula cita como grupo presente nas margens urbanas:",a:["Retirantes do sertão.","Diplomatas.","Fazendeiros ricos.","Militares estrangeiros.","Turistas europeus."],c:0,com:`<h3>Comentário</h3><p>Retirantes em busca de melhores condições também aparecem na explicação.</p>`},
+{q:"A visita de D. Pedro II a Aracaju é situada na aula em:",a:["1855.","1860.","1888.","1900.","1919."],c:1,com:`<h3>Comentário</h3><p>A aula menciona <b>1860</b>.</p>`},
+{q:"Qual patrimônio é associado à visita imperial?",a:["Mercado Municipal.","Ponte do Imperador.","Palácio Olímpio Campos.","Morro do Urubu.","Orla de Atalaia."],c:1,com:`<h3>Comentário</h3><div class="schema">D. PEDRO II → PONTE DO IMPERADOR</div>`},
+{q:"O ideal de modernização trabalhado na aula buscava:",a:["Ruralizar a cidade.","Europeizar e ordenar o espaço urbano.","Diminuir iluminação.","Eliminar o transporte coletivo.","Ampliar moradias de palha."],c:1,com:`<h3>Comentário</h3><p>Modernidade = embelezamento + ordem + padrões europeus.</p>`},
+{q:"Entre as doenças citadas na crise sanitária estão:",a:["Malária, dengue e zika apenas.","Peste bubônica, varíola e gripe espanhola.","Cólera apenas.","Sarampo e catapora apenas.","Tuberculose apenas."],c:1,com:`<h3>Comentário</h3><div class="schema">PESTE + VARÍOLA + GRIPE ESPANHOLA</div>`},
+{q:"A crise sanitária é relacionada na aula principalmente a:",a:["Excesso de infraestrutura.","Crescimento urbano sem infraestrutura suficiente.","Clima frio.","Excesso de hospitais.","Redução populacional."],c:1,com:`<h3>Comentário</h3><p>Muita gente para pouca estrutura pública.</p>`},
+{q:"No transporte urbano, a sequência apresentada é:",a:["Bonde elétrico → tração animal.","Tração animal → bonde elétrico.","Trem → bonde animal.","Ônibus → bonde.","Bonde → metrô."],c:1,com:`<h3>Comentário</h3><div class="schema">TRAÇÃO ANIMAL → BONDES ELÉTRICOS</div>`},
+{q:"O centro planejado concentrava principalmente:",a:["Moradias populares.","Investimentos em iluminação, calçamento e policiamento.","Atividades rurais.","Cortiços.","Áreas sem infraestrutura."],c:1,com:`<h3>Comentário</h3><p>O centro era a “vitrine da modernidade”.</p>`},
+{q:"O discurso higienista frequentemente atribuía as epidemias:",a:["Somente à falta de chuva.","À população pobre e suas moradias.","Aos comerciantes ricos.","Aos turistas.","Ao porto moderno."],c:1,com:`<h3>Comentário</h3><p>A aula critica a <b>culpabilização dos pobres</b>.</p>`},
+{q:"Na interpretação da aula, a crise sanitária também tinha relação com:",a:["Falta de saneamento e estrutura pública.","Excesso de parques.","Pouca população.","Altos salários.","Excesso de hospitais."],c:0,com:`<h3>Comentário</h3><div class="schema">PROBLEMA SANITÁRIO = TAMBÉM PROBLEMA ESTRUTURAL</div>`},
+{q:"As moradias de palha são apresentadas como:",a:["Símbolos de arquitetura aristocrática.","Moradias populares precárias.","Palacetes oficiais.","Hotéis de luxo.","Prédios administrativos."],c:1,com:`<h3>Comentário</h3><p>São associadas às áreas populares e marginalizadas.</p>`},
+{q:"A expressão 'teias de aranha' refere-se a:",a:["Linhas de bonde.","Ruas sinuosas e irregulares das áreas populares.","Redes de esgoto.","Pontes metálicas.","Ferrovias."],c:1,com:`<h3>Comentário</h3><div class="schema">“TEIAS DE ARANHA” = VIAS IRREGULARES / NÃO PLANEJADAS</div>`},
+{q:"A Belle Époque sergipana é associada a:",a:["Recuo tecnológico.","Modernização, embelezamento e influência europeia.","Fim das reformas urbanas.","Ruralização.","Declínio industrial obrigatório."],c:1,com:`<h3>Comentário</h3><p>É a ideia de uma “bela época” de modernização e progresso.</p>`},
+{q:"Sobre a fiscalização sanitária, assinale a correta:",a:["Não podia entrar em habitações.","Tinha poderes amplos para inspecionar e interditar casas.","Atuava apenas em hospitais.","Não interferia no cotidiano.","Era exclusivamente privada."],c:1,com:`<h3>Comentário</h3><p>A aula destaca amplos poderes sanitários.</p>`},
+{q:"Uma medida de controle social citada foi:",a:["Liberação de animais nas ruas.","Exigência de licença para vendedores ambulantes.","Fim da fiscalização.","Proibição de bondes.","Fim do comércio popular."],c:1,com:`<h3>Comentário</h3><div class="schema">AMBULANTE → LICENÇA OBRIGATÓRIA</div>`},
+{q:"O Bairro Industrial é relacionado principalmente a:",a:["Residência aristocrática.","Operários e atividade fabril.","Turismo de praia.","Administração estadual.","Agricultura."],c:1,com:`<h3>Comentário</h3><p>É o espaço operário-industrial trabalhado na aula.</p>`},
+{q:"As jornadas de trabalho citadas chegavam a:",a:["4 a 6 horas.","8 horas exatas.","14 a 16 horas.","2 horas.","Somente 10 horas semanais."],c:2,com:`<h3>Comentário</h3><p>A aula enfatiza jornadas muito extensas, de <b>14 a 16 horas</b>.</p>`},
+{q:"A aula menciona trabalho de:",a:["Apenas homens adultos.","Mulheres e crianças também.","Somente servidores públicos.","Somente estrangeiros.","Apenas empresários."],c:1,com:`<h3>Comentário</h3><p>Mulheres e crianças também integravam a força de trabalho.</p>`},
+{q:"A Greve de 1919 é explicada pela soma de:",a:["Riqueza popular e baixos impostos.","Exclusão social e exploração do trabalho.","Turismo e urbanização.","Modernização e prosperidade homogênea.","Crescimento rural."],c:1,com:`<h3>Comentário</h3><div class="schema">EXCLUSÃO + EXPLORAÇÃO → GREVE DE 1919</div>`},
+{q:"Pereira Lobo aparece na aula associado a:",a:["Discurso de crise assumida publicamente.","Discurso oficial de prosperidade e modernização.","Criação da Cidade de Palha como política social.","Fim dos investimentos urbanos.","Fim da industrialização."],c:1,com:`<h3>Comentário</h3><p>O professor destaca o contraste entre discurso oficial e realidade social.</p>`},
+{q:"Nas questões comentadas, a alternativa correta sobre a divisão socioespacial afirma que:",a:["A periferia recebia os mesmos investimentos do centro.","O centro concentrava iluminação, calçamento e policiamento.","A Cidade de Palha era símbolo arquitetônico elogiado.","A periferia foi totalmente erradicada no século XIX.","O Bairro Industrial era aristocrático."],c:1,com:`<h3>Comentário</h3><div class="schema">CENTRO → MAIS INVESTIMENTO<br>PERIFERIA → MENOS INVESTIMENTO</div>`},
+{q:"A síntese mais adequada da aula é:",a:["A modernização de Aracaju beneficiou de forma igual todas as classes.","A modernização conviveu com exclusão socioespacial, higienismo e exploração operária.","A crise sanitária foi causada apenas pelos pobres.","A Cidade de Palha foi planejada pelo governo.","A Greve de 1919 não teve relação com condições de trabalho."],c:1,com:`<h3>Comentário</h3><p>Esse é o fio central de toda a aula.</p><div class="schema">MODERNIZAÇÃO + EXCLUSÃO + HIGIENISMO + EXPLORAÇÃO</div>`}
+];
+
+let questions=questionBank.map(shuffledQuestion),idx=0,hits=0,misses=0,answered=false;
+const wrongList=[];
+function render(){
+ const q=questions[idx];answered=false;
+ document.getElementById("current").textContent=`${idx+1}/${questions.length}`;
+ document.getElementById("qnum").textContent=`QUESTÃO ${String(idx+1).padStart(2,"0")} DE ${questions.length}`;
+ document.getElementById("question").textContent=q.q;
+ document.getElementById("feedback").classList.remove("show");
+ const box=document.getElementById("options");box.innerHTML="";
+ q.a.forEach((t,i)=>{
+   const b=document.createElement("button");
+   b.className="option";
+   b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span>${t}`;
+   b.onclick=()=>answer(i,b);
+   box.appendChild(b)
+ });
+ updateStats();
+}
+function answer(i,btn){
+ if(answered)return;answered=true;
+ const q=questions[idx],buttons=[...document.querySelectorAll(".option")];
+ buttons.forEach(x=>x.disabled=true);
+ buttons[q.c].classList.add("correct");
+ const res=document.getElementById("result");
+ if(i===q.c){hits++;res.textContent="✓ ACERTOU!";res.className="result ok"}
+ else{
+   misses++;wrongList.push(idx);btn.classList.add("wrong");
+   res.textContent=`✕ ERROU. Gabarito: ${String.fromCharCode(65+q.c)}`;
+   res.className="result bad"
+ }
+ document.getElementById("comment").innerHTML=q.com;
+ document.getElementById("feedback").classList.add("show");
+ document.getElementById("nextBtn").textContent=idx===questions.length-1?"Ver resultado →":"Próxima questão →";
+ updateStats();
+ setTimeout(()=>document.getElementById("feedback").scrollIntoView({behavior:"smooth",block:"nearest"}),100);
+}
+function updateStats(){
+ document.getElementById("hits").textContent=hits;
+ document.getElementById("misses").textContent=misses;
+ const total=hits+misses;
+ document.getElementById("rate").textContent=total?Math.round(hits/total*100)+"%":"0%";
+ document.getElementById("bar").style.width=((total/questions.length)*100)+"%";
+}
+document.getElementById("nextBtn").onclick=()=>{
+ if(idx<questions.length-1){idx++;render();window.scrollTo({top:0,behavior:"smooth"})}
+ else finish()
+};
+function finish(){
+ document.getElementById("quizCard").style.display="none";
+ const f=document.getElementById("final");f.classList.add("show");
+ const pct=Math.round(hits/questions.length*100);
+ document.getElementById("finalScore").textContent=`${hits}/${questions.length} • ${pct}%`;
+ document.getElementById("finalText").textContent=
+ pct>=90?"Excelente. Você dominou muito bem modernização e crise sanitária.":
+ pct>=75?"Bom desempenho. Revise os erros antes da prova.":
+ pct>=60?"Base razoável. Volte aos blocos errados e refaça.":
+ "Revise a aula esquematizada e tente novamente.";
+ const rv=document.getElementById("review");
+ rv.innerHTML=wrongList.length
+ ?"<h3 style='color:#ffbdc3'>Pontos para revisar</h3>"+wrongList.map(n=>`<div class="small" style="margin:7px 0">• Questão ${n+1}: ${questions[n].q}</div>`).join("")
+ :"<p style='color:#2ed573;font-weight:800'>Você não errou nenhuma questão.</p>";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function restart(){
+ questions=questionBank.map(shuffledQuestion);
+ idx=0;hits=0;misses=0;wrongList.length=0;
+ document.getElementById("final").classList.remove("show");
+ document.getElementById("quizCard").style.display="block";
+ render();window.scrollTo({top:0,behavior:"smooth"});
+}
+render();
+</script>
+</body>
+</html>
