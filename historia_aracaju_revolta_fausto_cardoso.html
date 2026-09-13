@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>História de Aracaju — Revolta de Fausto Cardoso</title>
+<style>
+:root{
+  --bg:#07111f;--card:#0d1b2d;--text:#f5f7fb;--muted:#a9b7c9;
+  --line:#203752;--accent:#5bbcff;--ok:#2ed573;--bad:#ff5a68;
+  --warn:#ffd166;--purple:#b49cff
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#06101d,#09182a 45%,#07111f);
+  color:var(--text);min-height:100vh
+}
+.app{max-width:920px;margin:0 auto;padding:14px 14px 48px}
+.topbar{
+  position:sticky;top:0;z-index:20;background:rgba(7,17,31,.95);
+  backdrop-filter:blur(12px);padding:10px 0 12px;border-bottom:1px solid var(--line)
+}
+.brand h1{font-size:1.18rem;margin:0 0 4px}
+.brand .sub{color:var(--muted);font-size:.82rem}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.tabbtn{
+  border:1px solid var(--line);background:var(--card);color:var(--muted);
+  padding:11px;border-radius:12px;font-weight:800;cursor:pointer
+}
+.tabbtn.active{
+  background:linear-gradient(180deg,#123455,#0e2a47);
+  color:white;border-color:#315a80
+}
+.page{display:none}.page.active{display:block}
+.hero{
+  background:linear-gradient(135deg,#0f2945,#101d31);border:1px solid #254663;
+  border-radius:18px;padding:18px;margin-top:16px
+}
+.hero h2{margin:0 0 7px;font-size:1.15rem}
+.hero p{margin:0;color:#d7e3ef;line-height:1.5}
+.quickgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}
+.quick{background:#0b1727;border:1px solid var(--line);border-radius:12px;padding:11px}
+.quick b{display:block;color:#8fd0ff;margin-bottom:3px}
+.section{
+  margin-top:16px;background:var(--card);border:1px solid var(--line);
+  border-radius:17px;padding:17px;box-shadow:0 14px 40px rgba(0,0,0,.16)
+}
+.section h2{font-size:1rem;margin:0 0 11px;color:#91d1ff}
+.section h3{font-size:.91rem;margin:14px 0 7px;color:#dbe9f6}
+.section p,.section li{line-height:1.52;color:#e7edf5}
+.section ul{padding-left:19px;margin:8px 0}
+.badge{
+  display:inline-block;padding:5px 9px;border-radius:999px;background:#132c46;
+  color:#8fd0ff;font-weight:800;font-size:.7rem;letter-spacing:.04em;margin-bottom:8px
+}
+.schema{
+  margin:10px 0;padding:12px;border-radius:12px;background:#0f2237;
+  border-left:4px solid var(--warn);font-weight:800;line-height:1.72
+}
+.trap{
+  margin-top:10px;padding:10px 12px;border-radius:11px;
+  background:rgba(180,156,255,.08);border:1px solid rgba(180,156,255,.25)
+}
+.trap b{color:var(--purple)}
+.key{
+  padding:10px 12px;border-radius:12px;background:rgba(91,188,255,.08);
+  border:1px solid rgba(91,188,255,.24);margin:9px 0
+}
+.timeline{color:#ffd98a;font-weight:900;font-size:.78rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center}
+.stat b{display:block;font-size:1.02rem}.stat span{font-size:.68rem;color:var(--muted)}
+.progress{height:7px;background:#17283c;border-radius:99px;overflow:hidden;margin-top:10px}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--purple));transition:.25s}
+.qcard{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.qnum{color:var(--muted);font-size:.82rem;margin:9px 0 7px}
+.question{font-size:1.07rem;line-height:1.55;font-weight:800;margin:0 0 16px}
+.options{display:grid;gap:10px}
+.option{
+  width:100%;text-align:left;border:1px solid #2b405a;background:#0a1728;color:var(--text);
+  padding:13px 14px;border-radius:13px;cursor:pointer;font-size:.94rem;line-height:1.42;transition:.15s
+}
+.option:hover{border-color:#4f7399;transform:translateY(-1px)}
+.option:disabled{cursor:default}
+.option.correct{background:rgba(46,213,115,.12);border-color:var(--ok)}
+.option.wrong{background:rgba(255,90,104,.12);border-color:var(--bad)}
+.letter{
+  display:inline-flex;width:25px;height:25px;align-items:center;justify-content:center;
+  border-radius:7px;background:#162b43;margin-right:8px;font-weight:800
+}
+.feedback{display:none;margin-top:17px;border-top:1px solid var(--line);padding-top:16px}
+.feedback.show{display:block}
+.result{font-weight:900;font-size:1.05rem;margin-bottom:11px}
+.result.ok{color:var(--ok)}.result.bad{color:var(--bad)}
+.comment{
+  background:#091625;border:1px solid #1d3855;border-radius:14px;
+  padding:14px;line-height:1.52
+}
+.comment h3{font-size:.88rem;margin:0 0 8px;color:#8fd0ff;text-transform:uppercase}
+.comment p{margin:7px 0;color:#e7edf5}
+.actions{display:flex;gap:9px;margin-top:16px}
+button.ctrl{border:0;border-radius:11px;padding:11px 15px;font-weight:800;cursor:pointer}
+.next{background:var(--accent);color:#031321;flex:1}
+.reset{background:#1b2e44;color:#d9e4ef}
+.final{display:none;text-align:center}.final.show{display:block}
+.final .big{font-size:2.1rem;font-weight:900;color:var(--accent)}
+.review{margin-top:15px;text-align:left}.small{font-size:.8rem;color:var(--muted)}
+@media(max-width:620px){
+ .app{padding:8px 10px 34px}.section,.qcard{padding:14px}
+ .brand h1{font-size:1.02rem}.quickgrid{grid-template-columns:1fr}
+ .option{font-size:.9rem;padding:12px}.question{font-size:1rem}
+ .stats{gap:5px}.stat{padding:7px 4px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="topbar">
+  <div class="brand">
+    <h1>História de Aracaju — Revolta de Fausto Cardoso</h1>
+    <div class="sub">Aula esquematizada + simulado IDECAN</div>
+  </div>
+  <div class="tabs">
+    <button id="tabLesson" class="tabbtn active" onclick="showPage('lesson')">📘 Aula Esquematizada</button>
+    <button id="tabQuiz" class="tabbtn" onclick="showPage('quiz')">📝 Simulado IDECAN</button>
+  </div>
+</div>
+
+<main id="lessonPage" class="page active">
+
+  <div class="hero">
+    <span class="badge">ROTEIRO DA AULA</span>
+    <h2>Revolta de Fausto Cardoso — 1906</h2>
+    <p>Contexto da República Velha, disputa Cabaús × Pebas, Fausto Cardoso × Olímpio Campos, fraude eleitoral, deposição de Guilherme Campos e intervenção federal.</p>
+    <div class="quickgrid">
+      <div class="quick"><b>Ano-chave</b>1906</div>
+      <div class="quick"><b>Faustistas</b>Pebas</div>
+      <div class="quick"><b>Olimpistas</b>Cabaús</div>
+      <div class="quick"><b>Desfecho</b>Intervenção federal + morte de Fausto</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 00:35–02:10</div>
+    <h2>1. Contexto: República Velha</h2>
+    <p>A aula começa em 1889, com a queda do Império e início da República.</p>
+    <div class="schema">
+      1889 → PROCLAMAÇÃO DA REPÚBLICA<br>
+      ↓<br>
+      REPÚBLICA VELHA / REPÚBLICA OLIGÁRQUICA
+    </div>
+    <p>O professor apresenta esse período como marcado por disputas entre grupos oligárquicos e novas elites urbanas.</p>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 02:14–04:35</div>
+    <h2>2. Antiga elite x nova elite</h2>
+    <p>A aula contrasta dois grupos sociais e econômicos:</p>
+    <div class="schema">
+      ANTIGA ELITE → GRANDES PROPRIETÁRIOS DE TERRA / AÇÚCAR<br><br>
+      NOVA ELITE → POLÍTICOS + CLASSE MÉDIA + INTELECTUAIS + SETORES URBANOS
+    </div>
+    <div class="key"><b>Economia:</b> no interior, destaque para o açúcar; em Aracaju, a aula destaca a indústria têxtil/algodoeira.</div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 04:53–08:20</div>
+    <h2>3. Cabaús x Pebas</h2>
+    <div class="schema">
+      CABAÚS → ELITE AGRÁRIA / GRANDES PROPRIETÁRIOS<br>
+      LÍDER → OLÍMPIO CAMPOS<br><br>
+      PEBAS → CLASSE MÉDIA / INTELECTUAIS / NOVA ELITE<br>
+      LÍDER → FAUSTO CARDOSO
+    </div>
+    <div class="trap"><b>Pegadinha:</b> inverter os grupos. Cabaús não eram a classe média urbana; na aula eles representam a velha elite agrária.</div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 08:39–10:20</div>
+    <h2>4. Fausto Cardoso x Olímpio Campos</h2>
+    <p>Os dois são apresentados como figuras politicamente rivais.</p>
+    <p>Olímpio Campos aparece ligado a uma elite mais tradicional e conservadora; Fausto Cardoso, a uma elite mais liberal e emergente.</p>
+    <div class="schema">
+      OLÍMPIO CAMPOS → TRADIÇÃO / CONSERVADORISMO<br>
+      FAUSTO CARDOSO → NOVA ELITE / LIBERALISMO
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 10:18–13:20</div>
+    <h2>5. Estopim: acusações de fraude eleitoral</h2>
+    <p>Fausto Cardoso acusa a máquina política ligada a Olímpio Campos de fraudar eleições.</p>
+    <p>A aula destaca a eleição de <b>Guilherme Campos</b>, irmão de Olímpio, em 1906.</p>
+    <div class="schema">
+      ELEIÇÃO DE 1906<br>
+      ↓<br>
+      ACUSAÇÃO DE FRAUDE<br>
+      ↓<br>
+      AUMENTO DA TENSÃO POLÍTICA
+    </div>
+    <div class="trap"><b>Correção da fala:</b> Guilherme Campos é irmão de Olímpio Campos, não de Fausto.</div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 14:05–15:50</div>
+    <h2>6. Levante de 1906</h2>
+    <p>A aula menciona o soldado/comandante conhecido como <b>Papa Rosa</b>, aliado de Fausto Cardoso.</p>
+    <p>Parte das forças policiais/militares adere ao movimento, ocorre o cerco ao Palácio e a deposição provisória de Guilherme Campos.</p>
+    <div class="schema">
+      PAPA ROSA + FAUSTISTAS<br>
+      ↓<br>
+      MOBILIZAÇÃO ARMADA<br>
+      ↓<br>
+      DEPOSIÇÃO DE GUILHERME CAMPOS
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 15:54–17:30</div>
+    <h2>7. Intervenção federal e morte de Fausto Cardoso</h2>
+    <p>Guilherme Campos e Olímpio Campos procuram apoio no Rio de Janeiro.</p>
+    <p>O governo federal envia forças para sufocar a revolta.</p>
+    <div class="schema">
+      INTERVENÇÃO FEDERAL<br>
+      ↓<br>
+      REVOLTA SUFOCADA<br>
+      ↓<br>
+      FAUSTO CARDOSO É MORTO
+    </div>
+    <div class="trap"><b>Atenção:</b> a aula apresenta versões diferentes sobre as últimas palavras de Fausto, sem afirmar qual é historicamente verdadeira.</div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 17:29–19:15</div>
+    <h2>8. Luto e símbolo da rosa</h2>
+    <p>Após a morte de Fausto Cardoso, seus seguidores passam a usar uma <b>rosa</b> como símbolo de luto e identificação.</p>
+    <div class="schema">
+      MORTE DE FAUSTO → LUTO → ROSA NOS TRAJES
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>9. Morte de Olímpio Campos</h2>
+    <p>Meses depois, no Rio de Janeiro, Olímpio Campos é assassinado pelos filhos de Fausto Cardoso, segundo a sequência apresentada na aula.</p>
+    <div class="schema">
+      FAUSTO MORTO EM ARACAJU<br>
+      ↓<br>
+      OLÍMPIO CAMPOS MORTO NO RIO DE JANEIRO
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>10. Praças lado a lado</h2>
+    <p>A aula chama atenção para a ironia histórica de as praças <b>Fausto Cardoso</b> e <b>Olímpio Campos</b> estarem próximas, com referências aos dois personagens.</p>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 19:42–22:33</div>
+    <h2>11. Questão-resumo da aula</h2>
+    <p>Nas assertivas comentadas pelo professor:</p>
+    <ul>
+      <li>Cabaús como classe média urbana → <b>ERRADO</b>;</li>
+      <li>fraudes eleitorais como estopim → <b>CERTO</b>;</li>
+      <li>deposição provisória de Guilherme Campos → <b>CERTO</b>;</li>
+      <li>morte de Fausto e posterior morte de Olímpio → <b>CERTO</b>.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 22:40–25:25</div>
+    <h2>12. Desfecho político</h2>
+    <p>Os faustistas não saem vitoriosos no desfecho.</p>
+    <p>A intervenção federal restaura a ordem política oligárquica apresentada na aula.</p>
+    <div class="schema">
+      FAUSTISTAS / PEBAS → DERROTADOS<br>
+      GOVERNO FEDERAL → INTERVENÇÃO
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="badge">NATA PARA A PROVA</span>
+    <h2>Resumo final</h2>
+    <div class="schema">
+      REPÚBLICA VELHA → DISPUTA OLIGÁRQUICA<br><br>
+      CABAÚS = OLÍMPIO CAMPOS = ELITE AGRÁRIA<br>
+      PEBAS = FAUSTO CARDOSO = NOVA ELITE / CLASSE MÉDIA<br><br>
+      1906 → ELEIÇÃO DE GUILHERME CAMPOS<br>
+      ↓<br>
+      ACUSAÇÕES DE FRAUDE<br>
+      ↓<br>
+      LEVANTE FAUSTISTA<br>
+      ↓<br>
+      DEPOSIÇÃO PROVISÓRIA<br>
+      ↓<br>
+      INTERVENÇÃO FEDERAL<br>
+      ↓<br>
+      MORTE DE FAUSTO CARDOSO<br><br>
+      DEPOIS → OLÍMPIO CAMPOS É ASSASSINADO NO RIO
+    </div>
+  </div>
+</main>
+
+<main id="quizPage" class="page">
+  <div class="hero">
+    <span class="badge">SIMULADO IDECAN</span>
+    <h2>Revolta de Fausto Cardoso</h2>
+    <p>25 questões A–E, alternativas embaralhadas, correção imediata e comentários esquematizados.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="current">1/25</b><span>QUESTÃO</span></div>
+    <div class="stat"><b id="hits">0</b><span>ACERTOS</span></div>
+    <div class="stat"><b id="misses">0</b><span>ERROS</span></div>
+    <div class="stat"><b id="rate">0%</b><span>APROVEIT.</span></div>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+
+  <div id="quizCard" class="qcard">
+    <span class="badge">A–E • ESTILO IDECAN</span>
+    <div id="qnum" class="qnum"></div>
+    <div id="question" class="question"></div>
+    <div id="options" class="options"></div>
+    <div id="feedback" class="feedback">
+      <div id="result" class="result"></div>
+      <div id="comment" class="comment"></div>
+      <div class="actions"><button class="ctrl next" id="nextBtn">Próxima questão →</button></div>
+    </div>
+  </div>
+
+  <div id="final" class="qcard final">
+    <span class="badge">RESULTADO FINAL</span>
+    <div style="margin-top:14px" class="big" id="finalScore"></div>
+    <p id="finalText"></p>
+    <div class="review" id="review"></div>
+    <button class="ctrl reset" onclick="restart()">Refazer simulado</button>
+  </div>
+</main>
+</div>
+
+<script>
+function showPage(page){
+  const lesson=page==='lesson';
+  document.getElementById('lessonPage').classList.toggle('active',lesson);
+  document.getElementById('quizPage').classList.toggle('active',!lesson);
+  document.getElementById('tabLesson').classList.toggle('active',lesson);
+  document.getElementById('tabQuiz').classList.toggle('active',!lesson);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function shuffledQuestion(q){
+  const opts=q.a.map((text,i)=>({text,correct:i===q.c}));
+  for(let i=opts.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [opts[i],opts[j]]=[opts[j],opts[i]];
+  }
+  return {...q,a:opts.map(x=>x.text),c:opts.findIndex(x=>x.correct)};
+}
+const questionBank=[
+{q:"A Revolta de Fausto Cardoso ocorreu no contexto da:",a:["Era Vargas.","República Velha.","Ditadura Militar.","Segundo Reinado sem transição republicana.","Nova República."],c:1,com:`<h3>Comentário</h3><p>A revolta ocorre em <b>1906</b>, durante a República Velha.</p><div class="schema">1906 → REPÚBLICA VELHA</div>`},
+{q:"Os Cabaús representavam, segundo a aula:",a:["Classes médias urbanas.","Grandes proprietários e velha elite agrária.","Operários têxteis.","Militares tenentistas.","Ex-escravizados."],c:1,com:`<h3>Comentário</h3><div class="schema">CABAÚS = ELITE AGRÁRIA / GRANDES PROPRIETÁRIOS</div>`},
+{q:"O principal líder dos Cabaús era:",a:["Fausto Cardoso.","Guilherme Campos.","Olímpio Campos.","Papa Rosa.","Pereira Lobo."],c:2,com:`<h3>Comentário</h3><p><b>Olímpio Campos</b> lidera o grupo ligado à velha elite.</p>`},
+{q:"Os Pebas eram associados principalmente a:",a:["Velha aristocracia açucareira.","Classes médias urbanas e intelectuais.","Latifundiários do açúcar.","Monarquistas.","Militares federais."],c:1,com:`<h3>Comentário</h3><div class="schema">PEBAS = NOVA ELITE / CLASSE MÉDIA / INTELECTUAIS</div>`},
+{q:"O líder dos Pebas era:",a:["Olímpio Campos.","Fausto Cardoso.","Guilherme Campos.","D. Pedro II.","Barão de Maruim."],c:1,com:`<h3>Comentário</h3><p>O líder faustista é <b>Fausto Cardoso</b>.</p>`},
+{q:"Na economia de Aracaju desse período, a aula destaca:",a:["A indústria têxtil.","Somente o açúcar.","A mineração.","O café.","A borracha."],c:0,com:`<h3>Comentário</h3><p>A aula diferencia Aracaju do interior e destaca a <b>indústria têxtil/algodoeira</b>.</p>`},
+{q:"O estopim político da Revolta de 1906 foi associado a:",a:["Disputa religiosa.","Acusações de fraude eleitoral.","Aumento do preço do açúcar.","Invasão estrangeira.","Fim da indústria têxtil."],c:1,com:`<h3>Comentário</h3><div class="schema">ELEIÇÃO → FRAUDE → TENSÃO → REVOLTA</div>`},
+{q:"Quem assume o governo estadual em 1906, segundo a aula?",a:["Fausto Cardoso.","Guilherme Campos.","Olímpio Campos.","Papa Rosa.","Pereira Lobo."],c:1,com:`<h3>Comentário</h3><p>A aula destaca a entrada de <b>Guilherme Campos</b>.</p>`},
+{q:"Guilherme Campos era irmão de:",a:["Fausto Cardoso.","Olímpio Campos.","Papa Rosa.","Pereira Lobo.","Inácio Barbosa."],c:1,com:`<h3>Comentário</h3><p>O professor se corrige durante a aula: Guilherme era irmão de <b>Olímpio Campos</b>.</p>`},
+{q:"Fausto Cardoso acusava a máquina política de Olímpio Campos de:",a:["Fraudar eleições.","Sabotar fábricas.","Apoiar a monarquia.","Extinguir a indústria têxtil.","Invadir a Bahia."],c:0,com:`<h3>Comentário</h3><p>Fraude eleitoral é o ponto de tensão central.</p>`},
+{q:"O personagem conhecido como Papa Rosa aparece como:",a:["Aliado militar dos faustistas.","Líder dos Cabaús.","Governador deposto.","Presidente da República.","Industrial têxtil."],c:0,com:`<h3>Comentário</h3><p>Papa Rosa é apresentado como aliado de Fausto Cardoso.</p>`},
+{q:"Durante o levante, os revoltosos conseguiram:",a:["Depor provisoriamente Guilherme Campos.","Eleger Olímpio Campos.","Extinguir Sergipe.","Anexar Sergipe à Bahia.","Derrubar o governo federal."],c:0,com:`<h3>Comentário</h3><div class="schema">1906 → DEPOSIÇÃO PROVISÓRIA DE GUILHERME CAMPOS</div>`},
+{q:"Após a deposição provisória, quem intervém para sufocar a revolta?",a:["A Bahia.","O governo federal.","A Igreja Católica.","O governo de Alagoas.","A França."],c:1,com:`<h3>Comentário</h3><p>O governo federal envia tropas.</p>`},
+{q:"A intervenção federal culmina, segundo a aula, na:",a:["Vitória definitiva dos faustistas.","Morte de Fausto Cardoso.","Renúncia de Olímpio Campos.","Extinção do estado.","Fuga de Fausto para a Europa."],c:1,com:`<h3>Comentário</h3><div class="schema">INTERVENÇÃO FEDERAL → MORTE DE FAUSTO</div>`},
+{q:"Fausto Cardoso foi morto:",a:["No Rio de Janeiro.","Na praça central de Aracaju.","Em Recife.","Em Salvador.","Na Europa."],c:1,com:`<h3>Comentário</h3><p>A aula situa sua morte na praça central de Aracaju.</p>`},
+{q:"Sobre as últimas palavras de Fausto Cardoso, a aula:",a:["Afirma uma única versão como absolutamente certa.","Apresenta versões divergentes e não fecha qual é correta.","Diz que ele não falou nada.","Diz que escreveu uma carta.","Afirma que confessou fraude."],c:1,com:`<h3>Comentário</h3><p>O professor apresenta versões diferentes e diz que não há certeza.</p>`},
+{q:"Após a morte de Fausto, seus apoiadores passaram a usar:",a:["Uma rosa.","Uma faixa preta no braço apenas.","Um chapéu branco.","Uma estrela azul.","Uma bandeira verde."],c:0,com:`<h3>Comentário</h3><div class="schema">FAUSTISTAS → ROSA COMO SÍMBOLO DE LUTO E IDENTIFICAÇÃO</div>`},
+{q:"Meses depois da morte de Fausto, Olímpio Campos foi:",a:["Eleito presidente.","Assassinado no Rio de Janeiro.","Exilado na França.","Preso em Aracaju.","Nomeado ministro."],c:1,com:`<h3>Comentário</h3><p>Olímpio Campos é morto no Rio de Janeiro.</p>`},
+{q:"Segundo a sequência da aula, os responsáveis pela morte de Olímpio Campos foram:",a:["Filhos de Fausto Cardoso.","Militares federais.","Cabaús.","Operários têxteis.","Policiais sergipanos."],c:0,com:`<h3>Comentário</h3><p>A aula atribui o ato aos filhos de Fausto Cardoso.</p>`},
+{q:"As praças Fausto Cardoso e Olímpio Campos são lembradas na aula porque:",a:["Ficam em cidades diferentes.","Ficam próximas, apesar da rivalidade histórica entre os homenageados.","Foram construídas no século XXI.","Não possuem relação com os personagens.","São áreas industriais."],c:1,com:`<h3>Comentário</h3><p>O professor chama isso de uma ironia histórica.</p>`},
+{q:"Assinale a alternativa correta sobre os Cabaús.",a:["Representavam classes médias urbanas.","Eram ligados à velha elite agrária.","Eram liderados por Fausto Cardoso.","Defendiam a derrota de Olímpio Campos.","Eram o grupo tenentista."],c:1,com:`<h3>Comentário</h3><p>Cabaús = elite agrária e oligárquica.</p>`},
+{q:"Assinale a alternativa correta sobre os Pebas.",a:["Eram a velha elite açucareira.","Eram ligados a Fausto Cardoso e à nova elite urbana.","Eram liderados por Olímpio Campos.","Representavam exclusivamente grandes latifundiários.","Apoiavam Guilherme Campos."],c:1,com:`<h3>Comentário</h3><p>Pebas = faustistas, classe média e intelectuais.</p>`},
+{q:"O desfecho da Revolta de Fausto Cardoso foi:",a:["Vitória definitiva dos Pebas.","Derrota dos faustistas após intervenção federal.","Fim da República Velha.","Anexação de Sergipe.","Extinção das oligarquias em todo o Brasil."],c:1,com:`<h3>Comentário</h3><div class="schema">INTERVENÇÃO FEDERAL → DERROTA DOS FAUSTISTAS</div>`},
+{q:"A questão comentada pelo professor considera correta a afirmação de que:",a:["Os Cabaús eram formados por classes médias urbanas.","Fraudes eleitorais ajudaram a desencadear a revolta.","Fausto se exilou na Europa.","Sergipe virou território federal.","Os Pebas venceram definitivamente."],c:1,com:`<h3>Comentário</h3><p>A fraude eleitoral é uma assertiva aceita como correta na revisão.</p>`},
+{q:"A melhor síntese da Revolta de Fausto Cardoso é:",a:["Conflito entre antiga elite oligárquica e nova elite urbana, agravado por acusações de fraude eleitoral.","Revolta camponesa contra a escravidão.","Movimento separatista contra o Brasil.","Rebelião religiosa.","Conflito exclusivamente industrial."],c:0,com:`<h3>Comentário</h3><div class="schema">VELHA ELITE × NOVA ELITE → FRAUDE → REVOLTA → INTERVENÇÃO FEDERAL</div>`}
+];
+
+let questions=questionBank.map(shuffledQuestion),idx=0,hits=0,misses=0,answered=false;
+const wrongList=[];
+function render(){
+ const q=questions[idx];answered=false;
+ document.getElementById("current").textContent=`${idx+1}/${questions.length}`;
+ document.getElementById("qnum").textContent=`QUESTÃO ${String(idx+1).padStart(2,"0")} DE ${questions.length}`;
+ document.getElementById("question").textContent=q.q;
+ document.getElementById("feedback").classList.remove("show");
+ const box=document.getElementById("options");box.innerHTML="";
+ q.a.forEach((t,i)=>{
+   const b=document.createElement("button");
+   b.className="option";
+   b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span>${t}`;
+   b.onclick=()=>answer(i,b);
+   box.appendChild(b)
+ });
+ updateStats();
+}
+function answer(i,btn){
+ if(answered)return;answered=true;
+ const q=questions[idx],buttons=[...document.querySelectorAll(".option")];
+ buttons.forEach(x=>x.disabled=true);
+ buttons[q.c].classList.add("correct");
+ const res=document.getElementById("result");
+ if(i===q.c){hits++;res.textContent="✓ ACERTOU!";res.className="result ok"}
+ else{
+   misses++;wrongList.push(idx);btn.classList.add("wrong");
+   res.textContent=`✕ ERROU. Gabarito: ${String.fromCharCode(65+q.c)}`;
+   res.className="result bad"
+ }
+ document.getElementById("comment").innerHTML=q.com;
+ document.getElementById("feedback").classList.add("show");
+ document.getElementById("nextBtn").textContent=idx===questions.length-1?"Ver resultado →":"Próxima questão →";
+ updateStats();
+ setTimeout(()=>document.getElementById("feedback").scrollIntoView({behavior:"smooth",block:"nearest"}),100);
+}
+function updateStats(){
+ document.getElementById("hits").textContent=hits;
+ document.getElementById("misses").textContent=misses;
+ const total=hits+misses;
+ document.getElementById("rate").textContent=total?Math.round(hits/total*100)+"%":"0%";
+ document.getElementById("bar").style.width=((total/questions.length)*100)+"%";
+}
+document.getElementById("nextBtn").onclick=()=>{
+ if(idx<questions.length-1){idx++;render();window.scrollTo({top:0,behavior:"smooth"})}
+ else finish()
+};
+function finish(){
+ document.getElementById("quizCard").style.display="none";
+ const f=document.getElementById("final");f.classList.add("show");
+ const pct=Math.round(hits/questions.length*100);
+ document.getElementById("finalScore").textContent=`${hits}/${questions.length} • ${pct}%`;
+ document.getElementById("finalText").textContent=
+ pct>=90?"Excelente. Revolta de Fausto Cardoso muito bem dominada.":
+ pct>=75?"Bom desempenho. Revise as pegadinhas que errou.":
+ pct>=60?"Base razoável. Releia Cabaús × Pebas e o desfecho de 1906.":
+ "Revise a aula esquematizada e refaça.";
+ const rv=document.getElementById("review");
+ rv.innerHTML=wrongList.length
+ ?"<h3 style='color:#ffbdc3'>Pontos para revisar</h3>"+wrongList.map(n=>`<div class="small" style="margin:7px 0">• Questão ${n+1}: ${questions[n].q}</div>`).join("")
+ :"<p style='color:#2ed573;font-weight:800'>Você não errou nenhuma questão.</p>";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function restart(){
+ questions=questionBank.map(shuffledQuestion);
+ idx=0;hits=0;misses=0;wrongList.length=0;
+ document.getElementById("final").classList.remove("show");
+ document.getElementById("quizCard").style.display="block";
+ render();window.scrollTo({top:0,behavior:"smooth"});
+}
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>História de Aracaju — Tenentismo e Revolta de Julho de 1924</title>
+<style>
+:root{
+  --bg:#07111f;--card:#0d1b2d;--text:#f5f7fb;--muted:#a9b7c9;
+  --line:#203752;--accent:#5bbcff;--ok:#2ed573;--bad:#ff5a68;
+  --warn:#ffd166;--purple:#b49cff
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#06101d,#09182a 45%,#07111f);
+  color:var(--text);min-height:100vh
+}
+.app{max-width:920px;margin:0 auto;padding:14px 14px 48px}
+.topbar{
+  position:sticky;top:0;z-index:20;background:rgba(7,17,31,.95);
+  backdrop-filter:blur(12px);padding:10px 0 12px;border-bottom:1px solid var(--line)
+}
+.brand h1{font-size:1.18rem;margin:0 0 4px}
+.brand .sub{color:var(--muted);font-size:.82rem}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.tabbtn{
+  border:1px solid var(--line);background:var(--card);color:var(--muted);
+  padding:11px;border-radius:12px;font-weight:800;cursor:pointer
+}
+.tabbtn.active{
+  background:linear-gradient(180deg,#123455,#0e2a47);
+  color:white;border-color:#315a80
+}
+.page{display:none}.page.active{display:block}
+.hero{
+  background:linear-gradient(135deg,#0f2945,#101d31);border:1px solid #254663;
+  border-radius:18px;padding:18px;margin-top:16px
+}
+.hero h2{margin:0 0 7px;font-size:1.15rem}
+.hero p{margin:0;color:#d7e3ef;line-height:1.5}
+.quickgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}
+.quick{background:#0b1727;border:1px solid var(--line);border-radius:12px;padding:11px}
+.quick b{display:block;color:#8fd0ff;margin-bottom:3px}
+.section{
+  margin-top:16px;background:var(--card);border:1px solid var(--line);
+  border-radius:17px;padding:17px;box-shadow:0 14px 40px rgba(0,0,0,.16)
+}
+.section h2{font-size:1rem;margin:0 0 11px;color:#91d1ff}
+.section h3{font-size:.91rem;margin:14px 0 7px;color:#dbe9f6}
+.section p,.section li{line-height:1.52;color:#e7edf5}
+.section ul{padding-left:19px;margin:8px 0}
+.badge{
+  display:inline-block;padding:5px 9px;border-radius:999px;background:#132c46;
+  color:#8fd0ff;font-weight:800;font-size:.7rem;letter-spacing:.04em;margin-bottom:8px
+}
+.schema{
+  margin:10px 0;padding:12px;border-radius:12px;background:#0f2237;
+  border-left:4px solid var(--warn);font-weight:800;line-height:1.72
+}
+.trap{
+  margin-top:10px;padding:10px 12px;border-radius:11px;
+  background:rgba(180,156,255,.08);border:1px solid rgba(180,156,255,.25)
+}
+.trap b{color:var(--purple)}
+.key{
+  padding:10px 12px;border-radius:12px;background:rgba(91,188,255,.08);
+  border:1px solid rgba(91,188,255,.24);margin:9px 0
+}
+.timeline{color:#ffd98a;font-weight:900;font-size:.78rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center}
+.stat b{display:block;font-size:1.02rem}.stat span{font-size:.68rem;color:var(--muted)}
+.progress{height:7px;background:#17283c;border-radius:99px;overflow:hidden;margin-top:10px}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--purple));transition:.25s}
+.qcard{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.qnum{color:var(--muted);font-size:.82rem;margin:9px 0 7px}
+.question{font-size:1.07rem;line-height:1.55;font-weight:800;margin:0 0 16px}
+.options{display:grid;gap:10px}
+.option{
+  width:100%;text-align:left;border:1px solid #2b405a;background:#0a1728;color:var(--text);
+  padding:13px 14px;border-radius:13px;cursor:pointer;font-size:.94rem;line-height:1.42;transition:.15s
+}
+.option:hover{border-color:#4f7399;transform:translateY(-1px)}
+.option:disabled{cursor:default}
+.option.correct{background:rgba(46,213,115,.12);border-color:var(--ok)}
+.option.wrong{background:rgba(255,90,104,.12);border-color:var(--bad)}
+.letter{
+  display:inline-flex;width:25px;height:25px;align-items:center;justify-content:center;
+  border-radius:7px;background:#162b43;margin-right:8px;font-weight:800
+}
+.feedback{display:none;margin-top:17px;border-top:1px solid var(--line);padding-top:16px}
+.feedback.show{display:block}
+.result{font-weight:900;font-size:1.05rem;margin-bottom:11px}
+.result.ok{color:var(--ok)}.result.bad{color:var(--bad)}
+.comment{
+  background:#091625;border:1px solid #1d3855;border-radius:14px;
+  padding:14px;line-height:1.52
+}
+.comment h3{font-size:.88rem;margin:0 0 8px;color:#8fd0ff;text-transform:uppercase}
+.comment p{margin:7px 0;color:#e7edf5}
+.actions{display:flex;gap:9px;margin-top:16px}
+button.ctrl{border:0;border-radius:11px;padding:11px 15px;font-weight:800;cursor:pointer}
+.next{background:var(--accent);color:#031321;flex:1}
+.reset{background:#1b2e44;color:#d9e4ef}
+.final{display:none;text-align:center}.final.show{display:block}
+.final .big{font-size:2.1rem;font-weight:900;color:var(--accent)}
+.review{margin-top:15px;text-align:left}.small{font-size:.8rem;color:var(--muted)}
+@media(max-width:620px){
+ .app{padding:8px 10px 34px}.section,.qcard{padding:14px}
+ .brand h1{font-size:1.02rem}.quickgrid{grid-template-columns:1fr}
+ .option{font-size:.9rem;padding:12px}.question{font-size:1rem}
+ .stats{gap:5px}.stat{padding:7px 4px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="topbar">
+  <div class="brand">
+    <h1>História de Aracaju — Tenentismo e Revolta de Julho</h1>
+    <div class="sub">Aula esquematizada + simulado IDECAN</div>
+  </div>
+  <div class="tabs">
+    <button id="tabLesson" class="tabbtn active" onclick="showPage('lesson')">📘 Aula Esquematizada</button>
+    <button id="tabQuiz" class="tabbtn" onclick="showPage('quiz')">📝 Simulado IDECAN</button>
+  </div>
+</div>
+
+<main id="lessonPage" class="page active">
+
+  <div class="hero">
+    <span class="badge">ROTEIRO DA AULA</span>
+    <h2>Tenentismo em Sergipe — 1924</h2>
+    <p>República Velha, voto de cabresto, política do café com leite, 28º BC, Augusto Maynard, deposição de Gracho Cardoso, junta militar e os desdobramentos de 1930.</p>
+    <div class="quickgrid">
+      <div class="quick"><b>Contexto</b>Crise da República Velha</div>
+      <div class="quick"><b>Líder em Sergipe</b>Augusto Maynard Gomes</div>
+      <div class="quick"><b>Base militar</b>28º Batalhão de Caçadores</div>
+      <div class="quick"><b>Objetivo</b>Combater a ordem oligárquica</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 00:39–04:30</div>
+    <h2>1. O que foi o Tenentismo?</h2>
+    <p>Movimento protagonizado principalmente por jovens oficiais do Exército.</p>
+    <p>Na aula, os tenentes aparecem defendendo:</p>
+    <ul>
+      <li>moralização da política;</li>
+      <li>combate à corrupção;</li>
+      <li>fim da hegemonia oligárquica;</li>
+      <li>crítica ao voto de cabresto;</li>
+      <li>melhores condições para os militares.</li>
+    </ul>
+    <div class="schema">
+      TENENTISMO → CRÍTICA À REPÚBLICA OLIGÁRQUICA
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>2. República do Café com Leite</h2>
+    <p>A aula apresenta a República Velha como marcada pela alternância de poder entre São Paulo e Minas Gerais.</p>
+    <div class="schema">
+      SÃO PAULO → CAFÉ<br>
+      MINAS GERAIS → LEITE<br>
+      ↓<br>
+      POLÍTICA DO CAFÉ COM LEITE
+    </div>
+    <p>Esse sistema era sustentado por coronelismo, controle político local e práticas como o voto de cabresto.</p>
+  </div>
+
+  <div class="section">
+    <h2>3. Voto de cabresto</h2>
+    <p>Na explicação do professor, o voto não era secreto e podia ser controlado por grandes proprietários locais.</p>
+    <div class="schema">
+      OLIGARCAS / GRANDES PROPRIETÁRIOS<br>
+      ↓<br>
+      CONTROLE SOBRE O ELEITOR<br>
+      ↓<br>
+      VOTO DE CABRESTO
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 04:35–08:20</div>
+    <h2>4. Tenentismo em Sergipe</h2>
+    <p>O movimento nacional ecoa em Sergipe e Aracaju.</p>
+    <p>O grande nome destacado na aula é:</p>
+    <div class="schema">AUGUSTO MAYNARD GOMES</div>
+    <p>Ele aparece como líder principal do levante sergipano.</p>
+    <p>Outros nomes citados:</p>
+    <ul>
+      <li>João Soriano;</li>
+      <li>Eurípedes Lima.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>5. 28º Batalhão de Caçadores</h2>
+    <p>O 28º BC funciona como a base militar do movimento em Aracaju.</p>
+    <div class="schema">
+      28º BC<br>
+      ↓<br>
+      ORGANIZAÇÃO DOS REBELDES<br>
+      ↓<br>
+      TOMADA DE PONTOS ESTRATÉGICOS
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>6. Deposição de Gracho Cardoso</h2>
+    <p>Os tenentistas avançam sobre o Palácio do Governo e depõem o presidente do estado, <b>Gracho Cardoso</b>.</p>
+    <div class="schema">
+      TENENTISTAS → PALÁCIO DO GOVERNO → DEPOSIÇÃO DE GRACHO CARDOSO
+    </div>
+    <div class="trap"><b>Pegadinha:</b> não confundir Gracho Cardoso com Fausto Cardoso, personagem da revolta de 1906.</div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 09:22–12:20</div>
+    <h2>7. Controle da capital</h2>
+    <p>O levante ocupa pontos estratégicos de Aracaju:</p>
+    <ul>
+      <li>Palácio do Governo;</li>
+      <li>quartel de polícia;</li>
+      <li>cadeia pública;</li>
+      <li>telégrafo;</li>
+      <li>estação ferroviária;</li>
+      <li>companhia telefônica;</li>
+      <li>estação de energia elétrica.</li>
+    </ul>
+    <div class="schema">
+      CONTROLE DE COMUNICAÇÃO + ENERGIA + TRANSPORTE + GOVERNO<br>
+      = CONTROLE DA CAPITAL
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>8. Governo provisório militar</h2>
+    <p>Após a tomada da capital, instala-se uma junta/governo militar provisório.</p>
+    <p>A aula cita duração de aproximadamente <b>18 a 19 dias</b>, tratando o período como breve controle tenentista.</p>
+  </div>
+
+  <div class="section">
+    <h2>9. O que os tenentistas NÃO defendiam?</h2>
+    <p>Nas questões comentadas, o professor elimina como incorretas:</p>
+    <ul>
+      <li>reforma agrária imediata;</li>
+      <li>ordem política popular revolucionária;</li>
+      <li>saques generalizados;</li>
+      <li>destruição dos bondes;</li>
+      <li>movimento sindical como origem do levante.</li>
+    </ul>
+    <div class="trap"><b>IDECAN:</b> não transformar o Tenentismo em uma revolução socialista ou popular.</div>
+  </div>
+
+  <div class="section">
+    <h2>10. Objetivo político</h2>
+    <p>A resposta central da aula é combater a estrutura política da República Velha.</p>
+    <div class="schema">
+      VOTO DE CABRESTO<br>
+      +<br>
+      OLIGARQUIAS<br>
+      +<br>
+      CAFÉ COM LEITE<br>
+      ↓<br>
+      ALVO DO TENENTISMO
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>11. Repressão ao movimento</h2>
+    <p>O levante é posteriormente reprimido por forças leais ao governo, e seus líderes são presos.</p>
+    <div class="schema">
+      LEVANTE → CONTROLE TEMPORÁRIO → REPRESSÃO → DERROTA
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="timeline">⏱ 19:48–23:45</div>
+    <h2>12. Revolução de 1930 e Augusto Maynard</h2>
+    <p>Em 1930, Getúlio Vargas rompe a ordem política da República Velha.</p>
+    <p>Vargas passa a nomear interventores nos estados.</p>
+    <div class="schema">
+      1930 → VARGAS<br>
+      ↓<br>
+      INTERVENTORES ESTADUAIS<br>
+      ↓<br>
+      AUGUSTO MAYNARD EM SERGIPE
+    </div>
+    <p>A aula apresenta Maynard como nome ligado ao tenentismo e posteriormente indicado para governar/intervir em Sergipe.</p>
+  </div>
+
+  <div class="section">
+    <h2>13. Modernização x oligarquias locais</h2>
+    <p>Mesmo com a mudança de 1930, a aula enfatiza que Sergipe continuava fortemente oligárquico.</p>
+    <div class="schema">
+      MODERNIZAÇÃO / NOVO GOVERNO<br>
+      ↕<br>
+      ACORDOS COM OLIGARQUIAS LOCAIS
+    </div>
+    <p>Maynard precisaria negociar com grandes proprietários para aprovar medidas e manter governabilidade.</p>
+  </div>
+
+  <div class="section">
+    <h2>14. Comparação: Fausto Cardoso x Tenentismo</h2>
+    <div class="key">
+      <b>Fausto Cardoso — 1906:</b> disputa oligárquica interna, Pebas × Cabaús.<br><br>
+      <b>Tenentismo — 1924:</b> crise da República Velha, jovens oficiais contra a hegemonia oligárquica.
+    </div>
+    <div class="schema">
+      1906 → FAUSTO CARDOSO<br>
+      1924 → AUGUSTO MAYNARD
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="badge">NATA PARA A PROVA</span>
+    <h2>Resumo final</h2>
+    <div class="schema">
+      REPÚBLICA VELHA → CAFÉ COM LEITE + VOTO DE CABRESTO<br><br>
+      TENENTISMO → JOVENS OFICIAIS + MORALIZAÇÃO POLÍTICA<br><br>
+      SERGIPE → AUGUSTO MAYNARD<br>
+      BASE → 28º BC<br><br>
+      LEVANTE → TOMADA DO PALÁCIO<br>
+      ↓<br>
+      GRACHO CARDOSO DEPOSTO<br>
+      ↓<br>
+      JUNTA MILITAR PROVISÓRIA<br>
+      ↓<br>
+      CONTROLE TEMPORÁRIO DE ARACAJU<br>
+      ↓<br>
+      REPRESSÃO / DERROTA<br><br>
+      1930 → VARGAS → MAYNARD INTERVENTOR
+    </div>
+  </div>
+</main>
+
+<main id="quizPage" class="page">
+  <div class="hero">
+    <span class="badge">SIMULADO IDECAN</span>
+    <h2>Tenentismo em Sergipe</h2>
+    <p>25 questões A–E, alternativas embaralhadas, correção imediata e comentários esquematizados.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="current">1/25</b><span>QUESTÃO</span></div>
+    <div class="stat"><b id="hits">0</b><span>ACERTOS</span></div>
+    <div class="stat"><b id="misses">0</b><span>ERROS</span></div>
+    <div class="stat"><b id="rate">0%</b><span>APROVEIT.</span></div>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+
+  <div id="quizCard" class="qcard">
+    <span class="badge">A–E • ESTILO IDECAN</span>
+    <div id="qnum" class="qnum"></div>
+    <div id="question" class="question"></div>
+    <div id="options" class="options"></div>
+    <div id="feedback" class="feedback">
+      <div id="result" class="result"></div>
+      <div id="comment" class="comment"></div>
+      <div class="actions"><button class="ctrl next" id="nextBtn">Próxima questão →</button></div>
+    </div>
+  </div>
+
+  <div id="final" class="qcard final">
+    <span class="badge">RESULTADO FINAL</span>
+    <div style="margin-top:14px" class="big" id="finalScore"></div>
+    <p id="finalText"></p>
+    <div class="review" id="review"></div>
+    <button class="ctrl reset" onclick="restart()">Refazer simulado</button>
+  </div>
+</main>
+</div>
+
+<script>
+function showPage(page){
+  const lesson=page==='lesson';
+  document.getElementById('lessonPage').classList.toggle('active',lesson);
+  document.getElementById('quizPage').classList.toggle('active',!lesson);
+  document.getElementById('tabLesson').classList.toggle('active',lesson);
+  document.getElementById('tabQuiz').classList.toggle('active',!lesson);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function shuffledQuestion(q){
+  const opts=q.a.map((text,i)=>({text,correct:i===q.c}));
+  for(let i=opts.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [opts[i],opts[j]]=[opts[j],opts[i]];
+  }
+  return {...q,a:opts.map(x=>x.text),c:opts.findIndex(x=>x.correct)};
+}
+const questionBank=[
+{q:"O Tenentismo foi protagonizado principalmente por:",a:["Grandes proprietários rurais.","Jovens oficiais do Exército.","Trabalhadores rurais.","Empresários têxteis.","Líderes religiosos."],c:1,com:`<h3>Comentário</h3><div class="schema">TENENTISMO → JOVENS OFICIAIS</div>`},
+{q:"Um dos principais objetivos do Tenentismo era:",a:["Fortalecer a República Oligárquica.","Moralizar a política e combater a corrupção.","Restaurar a monarquia.","Implantar imediatamente o socialismo.","Fortalecer o voto de cabresto."],c:1,com:`<h3>Comentário</h3><p>O discurso central era de <b>moralização da política</b>.</p>`},
+{q:"A política do café com leite relacionava-se à alternância de poder entre:",a:["Bahia e Pernambuco.","São Paulo e Minas Gerais.","Sergipe e Alagoas.","Rio de Janeiro e Bahia.","Paraná e São Paulo."],c:1,com:`<h3>Comentário</h3><div class="schema">SP = CAFÉ | MG = LEITE</div>`},
+{q:"O voto de cabresto era caracterizado, na aula, por:",a:["Voto secreto e livre.","Controle do voto por chefes políticos e proprietários.","Voto obrigatório feminino.","Voto eletrônico.","Participação exclusiva dos militares."],c:1,com:`<h3>Comentário</h3><p>Era uma forma de controle político do eleitor.</p>`},
+{q:"O grande líder tenentista de Sergipe destacado na aula é:",a:["Fausto Cardoso.","Augusto Maynard Gomes.","Olímpio Campos.","Gracho Cardoso.","Pereira Lobo."],c:1,com:`<h3>Comentário</h3><div class="schema">TENENTISMO EM SERGIPE → AUGUSTO MAYNARD</div>`},
+{q:"A principal base militar do levante em Aracaju foi:",a:["28º Batalhão de Caçadores.","Quartel da Marinha.","Guarda Municipal.","Polícia Federal.","1º Regimento de Cavalaria."],c:0,com:`<h3>Comentário</h3><p>O <b>28º BC</b> aparece como núcleo do movimento.</p>`},
+{q:"Além de Maynard, a aula cita como líderes do movimento:",a:["João Soriano e Eurípedes Lima.","Fausto Cardoso e Olímpio Campos.","Inácio Barbosa e Pirro.","Pereira Lobo e Barão de Maruim.","Gracho Cardoso e Guilherme Campos."],c:0,com:`<h3>Comentário</h3><p>João Soriano e Eurípedes Lima aparecem junto a Maynard.</p>`},
+{q:"O presidente do estado deposto pelos tenentistas foi:",a:["Fausto Cardoso.","Gracho Cardoso.","Olímpio Campos.","Guilherme Campos.","Inácio Barbosa."],c:1,com:`<h3>Comentário</h3><div class="schema">1924 → GRACHO CARDOSO DEPOSTO</div>`},
+{q:"Os tenentistas tomaram inicialmente:",a:["O Palácio do Governo.","O porto apenas.","Somente a estação ferroviária.","A Catedral.","A Assembleia Federal."],c:0,com:`<h3>Comentário</h3><p>A tomada do Palácio é central na narrativa.</p>`},
+{q:"Entre os locais estratégicos ocupados pelos rebeldes estavam:",a:["Telégrafo, cadeia pública e estação de energia.","Somente hospitais.","Apenas escolas.","Somente fazendas.","Apenas igrejas."],c:0,com:`<h3>Comentário</h3><p>Controlar comunicação e infraestrutura significava controlar a capital.</p>`},
+{q:"A ocupação do telégrafo e da companhia telefônica tinha importância porque:",a:["Controlava comunicações.","Aumentava a produção de açúcar.","Criava emprego rural.","Substituía a ferrovia.","Eliminava o porto."],c:0,com:`<h3>Comentário</h3><div class="schema">COMUNICAÇÃO = PODER E CONTROLE</div>`},
+{q:"Durante o controle tenentista foi criada:",a:["Uma junta governativa provisória.","Uma monarquia.","Uma república socialista.","Uma assembleia constituinte nacional.","Uma capitania hereditária."],c:0,com:`<h3>Comentário</h3><p>A aula cita uma junta/governo militar provisório.</p>`},
+{q:"O movimento tenentista em Sergipe foi:",a:["Definitivamente vitorioso.","Posteriormente reprimido.","Ignorado pelo governo.","Transformado em monarquia.","Apoiado unanimemente pelas oligarquias."],c:1,com:`<h3>Comentário</h3><div class="schema">LEVANTE → CONTROLE TEMPORÁRIO → REPRESSÃO</div>`},
+{q:"Os líderes do movimento, após a repressão:",a:["Foram presos.","Viraram presidentes imediatamente.","Foram exilados na França todos.","Assumiram o governo federal.","Fundaram um novo estado."],c:0,com:`<h3>Comentário</h3><p>A aula afirma que os líderes foram presos.</p>`},
+{q:"O Tenentismo combatia principalmente:",a:["A hegemonia oligárquica da República Velha.","A independência do Brasil.","A industrialização.","O fim da escravidão.","A urbanização de Aracaju."],c:0,com:`<h3>Comentário</h3><div class="schema">ALVO → OLIGARQUIAS + CAFÉ COM LEITE + VOTO DE CABRESTO</div>`},
+{q:"Nas questões da aula, a proposta de reforma agrária imediata pelos tenentistas é:",a:["Correta.","Errada.","O principal objetivo.","A causa da revolta.","A única pauta militar."],c:1,com:`<h3>Comentário</h3><p>O professor elimina essa afirmação.</p>`},
+{q:"A ideia de que os rebeldes saquearam armazéns e destruíram os bondes foi tratada como:",a:["Correta.","Errada.","Parcialmente correta.","Objetivo central.","Fato principal da revolta."],c:1,com:`<h3>Comentário</h3><p>A aula rejeita essa caracterização.</p>`},
+{q:"O apoio social buscado pelos rebeldes incluía:",a:["Classes médias e operários.","Somente latifundiários.","Somente estrangeiros.","Apenas banqueiros.","Exclusivamente o clero."],c:0,com:`<h3>Comentário</h3><p>A aula menciona tentativa de atrair apoio de classes médias e operárias.</p>`},
+{q:"A Revolta de Fausto Cardoso e o Tenentismo diferem porque:",a:["A primeira é disputa oligárquica interna; o segundo é crise da República Velha com protagonismo militar jovem.","São exatamente o mesmo movimento.","Ambas ocorreram em 1930.","Ambas foram lideradas por Maynard.","Ambas tinham o mesmo líder político."],c:0,com:`<h3>Comentário</h3><div class="schema">1906 ≠ 1924</div>`},
+{q:"A Revolta de Fausto Cardoso é associada ao ano de:",a:["1906.","1924.","1930.","1889.","1919."],c:0,com:`<h3>Comentário</h3><p>Fausto Cardoso = <b>1906</b>.</p>`},
+{q:"O Tenentismo sergipano trabalhado na aula está ligado principalmente a:",a:["1924.","1855.","1906.","1919.","1964."],c:0,com:`<h3>Comentário</h3><p>O bloco trata do levante tenentista de <b>1924</b>.</p>`},
+{q:"Em 1930, segundo a aula, Getúlio Vargas:",a:["Mantém integralmente a política do café com leite.","Rompe com a ordem oligárquica e nomeia interventores.","Restaura a monarquia.","Entrega os estados às antigas oligarquias sem mudança.","Extingue o Exército."],c:1,com:`<h3>Comentário</h3><div class="schema">1930 → VARGAS → INTERVENTORES</div>`},
+{q:"Augusto Maynard, após 1930, é apresentado como:",a:["Interventor/governante indicado em Sergipe.","Presidente da República.","Líder da monarquia.","Governador de Minas Gerais.","Chefe da Marinha."],c:0,com:`<h3>Comentário</h3><p>O professor liga Maynard ao governo estadual após 1930.</p>`},
+{q:"Mesmo com Maynard no poder, a aula destaca que:",a:["As oligarquias desapareceram imediatamente.","Era necessário negociar com elites locais.","Sergipe deixou de ter grandes proprietários.","Não havia oposição política.","Toda modernização era aprovada automaticamente."],c:1,com:`<h3>Comentário</h3><p>Modernização convivia com a permanência do poder oligárquico.</p>`},
+{q:"A melhor síntese do Tenentismo em Sergipe é:",a:["Movimento militar contra práticas oligárquicas, com tomada temporária de Aracaju e posterior repressão.","Movimento monarquista de grandes proprietários.","Revolta popular socialista.","Guerra de independência.","Movimento exclusivamente sindical."],c:0,com:`<h3>Comentário</h3><div class="schema">TENENTES → TOMADA DA CAPITAL → JUNTA PROVISÓRIA → REPRESSÃO</div>`}
+];
+
+let questions=questionBank.map(shuffledQuestion),idx=0,hits=0,misses=0,answered=false;
+const wrongList=[];
+function render(){
+ const q=questions[idx];answered=false;
+ document.getElementById("current").textContent=`${idx+1}/${questions.length}`;
+ document.getElementById("qnum").textContent=`QUESTÃO ${String(idx+1).padStart(2,"0")} DE ${questions.length}`;
+ document.getElementById("question").textContent=q.q;
+ document.getElementById("feedback").classList.remove("show");
+ const box=document.getElementById("options");box.innerHTML="";
+ q.a.forEach((t,i)=>{
+   const b=document.createElement("button");
+   b.className="option";
+   b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span>${t}`;
+   b.onclick=()=>answer(i,b);
+   box.appendChild(b)
+ });
+ updateStats();
+}
+function answer(i,btn){
+ if(answered)return;answered=true;
+ const q=questions[idx],buttons=[...document.querySelectorAll(".option")];
+ buttons.forEach(x=>x.disabled=true);
+ buttons[q.c].classList.add("correct");
+ const res=document.getElementById("result");
+ if(i===q.c){hits++;res.textContent="✓ ACERTOU!";res.className="result ok"}
+ else{
+   misses++;wrongList.push(idx);btn.classList.add("wrong");
+   res.textContent=`✕ ERROU. Gabarito: ${String.fromCharCode(65+q.c)}`;
+   res.className="result bad"
+ }
+ document.getElementById("comment").innerHTML=q.com;
+ document.getElementById("feedback").classList.add("show");
+ document.getElementById("nextBtn").textContent=idx===questions.length-1?"Ver resultado →":"Próxima questão →";
+ updateStats();
+ setTimeout(()=>document.getElementById("feedback").scrollIntoView({behavior:"smooth",block:"nearest"}),100);
+}
+function updateStats(){
+ document.getElementById("hits").textContent=hits;
+ document.getElementById("misses").textContent=misses;
+ const total=hits+misses;
+ document.getElementById("rate").textContent=total?Math.round(hits/total*100)+"%":"0%";
+ document.getElementById("bar").style.width=((total/questions.length)*100)+"%";
+}
+document.getElementById("nextBtn").onclick=()=>{
+ if(idx<questions.length-1){idx++;render();window.scrollTo({top:0,behavior:"smooth"})}
+ else finish()
+};
+function finish(){
+ document.getElementById("quizCard").style.display="none";
+ const f=document.getElementById("final");f.classList.add("show");
+ const pct=Math.round(hits/questions.length*100);
+ document.getElementById("finalScore").textContent=`${hits}/${questions.length} • ${pct}%`;
+ document.getElementById("finalText").textContent=
+ pct>=90?"Excelente. Tenentismo muito bem dominado.":
+ pct>=75?"Bom desempenho. Revise as pegadinhas que errou.":
+ pct>=60?"Base razoável. Releia Maynard, 28º BC e Gracho Cardoso.":
+ "Revise a aula esquematizada e refaça.";
+ const rv=document.getElementById("review");
+ rv.innerHTML=wrongList.length
+ ?"<h3 style='color:#ffbdc3'>Pontos para revisar</h3>"+wrongList.map(n=>`<div class="small" style="margin:7px 0">• Questão ${n+1}: ${questions[n].q}</div>`).join("")
+ :"<p style='color:#2ed573;font-weight:800'>Você não errou nenhuma questão.</p>";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function restart(){
+ questions=questionBank.map(shuffledQuestion);
+ idx=0;hits=0;misses=0;wrongList.length=0;
+ document.getElementById("final").classList.remove("show");
+ document.getElementById("quizCard").style.display="block";
+ render();window.scrollTo({top:0,behavior:"smooth"});
+}
+render();
+</script>
+</body>
+</html>
